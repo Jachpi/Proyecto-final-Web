@@ -1,0 +1,56 @@
+- Inicio de sesión para admin y usuarios
+
+Un admin puede:
+	crear eventos
+	eliminar eventos
+	aprobar eventos
+
+Un usuario puede:
+	crear eventos, sujetos a la aprobación de un administrador
+	editar eventos, sujetos a la aprobación de un administrador
+
+Un usuario puede ser:
+	estudiante
+	profesor
+	coordinador
+	dirección
+
+Los eventos se deben poder ver en formato:
+	diario
+	semanal
+	mensual
+
+Los eventos se categorizan automáticamente como "pasados" una vez hayan transcurrido
+
+Los eventos pueden tener las siguientes categorías:
+	evento para estudiantes
+	evento para profesores
+	evento para la comunidad universitaria
+
+Cada evento de tener:
+	título
+	imagen
+	fecha
+	hora
+	descripción
+	categoría (línea 25)
+	ubicación
+	organizador
+	registro (a través de enlace y QR)
+	estado del evento (aprobado|pendiente|rechazado|finalizado|cancelado) Estos 2 últimos no están mencionados
+
+Responsive :)
+
+Buen rendimiento incluso con varios usuarios a la vez
+
+Contraseñas encriptadas
+
+Protección contra sql inyection y cross-site scripting
+
+Código comentado y bonito
+
+Debe haber un documento claro y detallado del desarrollo y uso de la plataforma
+
+Opcional (pero ya sabes que no va a ser así):
+	Llamar a apis de terceros (mapas, el tiempo, etc)
+
