@@ -92,6 +92,19 @@ body {
     background: #6b0000;
 }
 
+.bad-login-text {
+    color: #6b0000;
+    display: none;
+}
+.bad-login-text-active {
+    color: #6b0000;
+    font-size: medium;
+}
+.bad-login-text-active2{
+    color: #6b0000;
+    animation: text-zoom-in-out 0.25s 1;
+    position: relative;
+}
 
 .register-link {
     margin-top: 15px;
@@ -144,4 +157,13 @@ body {
 
 .btn-close:hover {
     background: #c9302c;
+}
+
+
+@keyframes text-zoom-in-out {
+    0% {font-size: medium;}
+    25% {font-size: large;}
+    50% {font-size: larger;}
+    75% {font-size: large;}
+    100%{font-size: medium;}
 }

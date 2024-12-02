@@ -10,10 +10,10 @@ Un usuario puede:
 	editar eventos, sujetos a la aprobación de un administrador
 
 Un usuario puede ser:
-	estudiante
-	profesor
-	coordinador
-	dirección
+	estudiante (0)
+	profesor (1)
+	coordinador (2)
+	dirección (3)
 
 Los eventos se deben poder ver en formato:
 	diario
