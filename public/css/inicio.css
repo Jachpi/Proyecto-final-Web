@@ -1,0 +1,137 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    display: flex;
+    flex-direction: column; /* Coloca los elementos en columna */
+    min-height: 100vh; /* Asegura que el contenido ocupe toda la altura de la pantalla */
+}
+
+.topnav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: salmon;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+}
+
+.topnav h1 {
+    font-style: italic;
+    font-size: 24px;
+    margin: 10px 0;
+    color: white;
+}
+
+.topnav a{
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+}
+
+.topnav .modal-trigger {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.topnav .modal-trigger:hover {
+    background-color: #b72323;
+    color: white;
+}
+
+.topnav a:hover {
+    background-color: #ee2929;
+    color: white;
+}
+
+.topnav a.active {
+    background-color: #b72323;
+    color: white;
+}
+
+.event-list {
+    flex: 1; /* Toma todo el espacio disponible entre el topnav y el footer */
+    margin-top: 70px; /* Espacio para el topnav fijo */
+    padding: 20px;
+}
+
+.event-list ul {
+    columns: 3;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.event-list li {
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal */
+.modal-checkbox {
+    display: none;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+    display: inline-block;
+    margin-top: 20px;
+    color: white;
+    background: salmon;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.close-modal:hover {
+    background: #b72323;
+}
+
+/* Mostrar el modal cuando el checkbox está activo */
+.modal-checkbox:checked + .modal {
+    display: flex;
+}
+
+footer {
+    background: salmon;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
