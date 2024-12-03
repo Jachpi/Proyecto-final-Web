@@ -59,6 +59,19 @@ body {
     color: white;
 }
 
+/*selección de elementos*/
+.search-tab input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.search-tab input[type="radio"] {
+    display: none; /* Oculta los radio buttons */
+}
+
 /*Calendar css*/
 .event-list {
     column-gap: 2px;
