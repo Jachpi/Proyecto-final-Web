@@ -9,6 +9,22 @@
 </head>
 
 <body>
+    <div class="search-tab">
+        <input type="text" id="search" placeholder="Ingresa tu búsqueda">
+        
+        <input type="radio" id="Hoy" name="eventos" class="radio">
+        <label for="Hoy" class="checkbox-label">Eventos hoy</label>
+        
+        <input type="radio" id="EstaSemana" name="eventos" class="radio">
+        <label for="EstaSemana" class="checkbox-label">Eventos esta semana</label>
+        
+        <input type="radio" id="EsteMes" name="eventos" class="radio">
+        <label for="EsteMes" class="checkbox-label">Eventos este mes</label>
+    </div>
+    
+
+
+
     <div class="topnav">
         <h1>UEM Events</h1>
         <a class="active" href="#eventos">Eventos</a>
@@ -81,7 +97,21 @@
     <footer id="contact">
         <p>Universidad Europea de Madrid</p>
         <p>Calle Tajo, s/n, 28670 Villaviciosa de Odón, Madrid</p>
+        <p> Contáctanos en nuestro <a href="mailto:europea@europea.es">email</a></p>
     </footer>
+
+    <!-- Modificar esto y meterlo en el codigo final de front, esto lo que hace es descheckear los filtros de eventos -->
+    <script>
+        window.addEventListener("load", () => {
+            // Obtener todos los radio buttons del grupo "eventos"
+            const radios = document.querySelectorAll('input[name="eventos"]');
+            // Desmarcar cada uno al cargar la página
+            radios.forEach(radio => radio.checked = false);
+        });
+    </script>
+
+
+
 </body>
 
 </html>

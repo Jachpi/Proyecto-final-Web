@@ -19,7 +19,6 @@ body {
     font-size: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-
 }
 
 .topnav h1 {
@@ -59,9 +58,52 @@ body {
     color: white;
 }
 
+.search-tab {
+    margin-top: 140px;
+    margin-bottom: 10px;
+    margin-left: 2%;
+    display: flex;
+}
+
+.search-tab input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.search-tab input[type="radio"] {
+    display: none; /* Oculta los radio buttons */
+}
+
+.checkbox-label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    user-select: none;
+}
+
+input[type="radio"]:checked + .checkbox-label {
+    background-color: #007BFF;
+    border-color: #0056b3;
+    color: white;
+}
+
+.checkbox-label:hover {
+    background-color: #f0f0f0;
+    border-color: #bbb;
+}
+  
+
 .event-list {
     flex: 1; /* Toma todo el espacio disponible entre el topnav y el footer */
-    margin-top: 70px; /* Espacio para el topnav fijo */
+    margin-top: 10px; /* Espacio para el topnav fijo */
     padding: 20px;
 }
 
