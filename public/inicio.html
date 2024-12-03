@@ -9,6 +9,15 @@
 </head>
 
 <body>
+    <div class="topnav">
+        <h1>UEM Events</h1>
+        <nav>
+            <a class="active" href="#eventos">Eventos</a>
+            <a href="#contact">Contáctanos</a>
+            <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
+        </nav>
+    </div>
+
     <div class="search-tab">
         <input type="text" id="search" placeholder="Ingresa tu búsqueda">
         
@@ -18,17 +27,14 @@
         <input type="radio" id="EstaSemana" name="eventos" class="radio">
         <label for="EstaSemana" class="checkbox-label">Eventos esta semana</label>
         
-        <input type="radio" id="EsteMes" name="eventos" class="radio">
+        <input type="radio" id="EsteMes" name="eventos" class="radio" checked>
         <label for="EsteMes" class="checkbox-label">Eventos este mes</label>
     </div>
 
-    <div class="topnav">
-        <h1>UEM Events</h1>
-        <nav>
-            <a class="active" href="#eventos">Eventos</a>
-            <a href="#contact">Contáctanos</a>
-            <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
-        </nav>
+    <div class = "pagination">
+        <button>🡐</button>
+        <p id = "month-text-display">Mes de hoy</p>
+        <button>🡒</button>
     </div>
 
     <div class="event-list">

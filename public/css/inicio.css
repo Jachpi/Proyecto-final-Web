@@ -60,6 +60,13 @@ body {
 }
 
 /*selección de elementos*/
+.search-tab {
+    margin-top: 140px;
+    margin-bottom: 10px;
+    margin-left: 2%;
+    display: flex;
+}
+
 .search-tab input[type="text"] {
     width: 80%;
     padding: 10px;
@@ -71,7 +78,6 @@ body {
 .search-tab input[type="radio"] {
     display: none; /* Oculta los radio buttons */
 }
-
 
 .checkbox-label {
     display: inline-block;
@@ -92,8 +98,44 @@ input[type="radio"]:checked + .checkbox-label {
 }
 
 .checkbox-label:hover {
-    background-color: #f0f0f0;
+    background-color: #a9ebff;
     border-color: #bbb;
+}
+
+/*Paginación*/
+.pagination{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: center;
+    padding-right: 1em;
+    margin: 10px;
+    width: 99%;
+    max-width: 95%;
+    max-height: 10em;
+    height: 10%;
+}
+
+.pagination button{
+    overflow: hidden;
+    flex-shrink: 0.1;
+    border-radius: 5px;
+    width: 5%;
+    font-size:xx-large;
+    text-align: center;
+    background-color: salmon;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.pagination button:hover{
+    background-color: #a9ebff;
+    transition: 0.3s;
+}
+
+.pagination * {
+    margin: 2px;
 }
 
 /*Calendar css*/
@@ -104,7 +146,7 @@ input[type="radio"]:checked + .checkbox-label {
     grid-template-columns: repeat(7, 14.2%);
     grid-template-rows: 3em repeat(6, 1fr);
     flex: 1; /*Toma todo el espacio disponible entre el topnav y el footer*/
-    margin-top: 100px; /* Espacio para el topnav fijo*/
+    margin-top: 0px;
     padding: 20px;
     align-content: stretch;
     align-items: stretch;
@@ -112,6 +154,7 @@ input[type="radio"]:checked + .checkbox-label {
 }
 
 .event-list div {
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;

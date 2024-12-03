@@ -2,11 +2,10 @@
 let eventList = document.getElementsByClassName("event-list")[0]
 const now = new Date();
 let dia;
-
+let monthTextDisplay = document.getElementById("month-text-display")
 
 function appendDays(dayAmount, offset, currDay){
 
- 
     if (offset == 6){
         offset = -1
     }
@@ -95,9 +94,11 @@ switch(month){
         break
 }
 
-const diaSemana = new Date(monthName + "1 00:01:00");
+monthTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(now) //para pasar el mes de hoy a español
 
-let diaNum = diaSemana.getDay()
+const primerDiaDeMes = new Date(monthName + "1 00:01:00");
+
+let diaNum = primerDiaDeMes.getDay()
 let diaOffset = 0
 
 switch (diaNum){
