@@ -59,8 +59,8 @@ body {
     margin-bottom: 5px;
 }
 
-.input-group input {
-    width: 100%;
+.input-group input { /* 95% porque por alguna razon el margin right no lo pilla bien */
+    width: 95%;
     padding: 10px;
     border: 1px solid #dddddd;
     border-radius: 4px;
