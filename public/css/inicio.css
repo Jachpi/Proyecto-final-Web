@@ -60,24 +60,55 @@ body {
 }
 
 .event-list {
-    flex: 1; /* Toma todo el espacio disponible entre el topnav y el footer */
-    margin-top: 70px; /* Espacio para el topnav fijo */
+    column-gap: 2px;
+    row-gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(7, 14.2%);
+    grid-template-rows: repeat(6, 1fr);
+    flex: 1; /*Toma todo el espacio disponible entre el topnav y el footer*/
+    margin-top: 100px; /* Espacio para el topnav fijo*/
     padding: 20px;
+    align-content: stretch;
+    align-items: stretch;
+    position: relative;
 }
 
-.event-list ul {
+.event-list div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     columns: 3;
     list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.event-list li {
-    margin-bottom: 20px;
     padding: 10px;
+    margin: 0;
+    margin-bottom: 20px;
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.event-list div:hover{
+    opacity: 1;
+    background-color: #a9ebff;
+    transition: 0.3s;
+}
+
+.event-list .dia-pasado {
+    background: rgb(155, 155, 155);
+}
+.event-list .dia-pasado:hover {
+    background: rgb(155, 155, 155);
+}
+.event-list .dia-actual {
+    border-style: dashed;
+    border-width: 3px;
+    border-color: red;
+    background-color: salmon;
+}
+
+.event12 {
+    grid-column: 4/5;
+    grid-row: 3/4;
 }
 
 /* Modal */
