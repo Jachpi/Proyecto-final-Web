@@ -28,11 +28,18 @@ function appendDays(dayAmount, offset, currDay){
                 dia.className = "dia-actual"
             }
             dia.addEventListener('click', (celda) => {
-                celda.stopPropagation() //previene que la animación pueda ser activada por sus hijos de forma individual
-                const clickedDay = celda.target
-                const diaType = clickedDay.className
+                let clickedDay = celda.target
+                let diaType = clickedDay.className
+                if (clickedDay.tagName != "DIV"){ // Previene que la animación aplique a sus hijos (que son todos <p> en este caso)
+                    clickedDay = clickedDay.parentElement
+                    diaType = clickedDay.className
+                }
                 if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
-                    clickedDay.className = "dia-clicked"
+                    if(clickedDay.className == "dia-actual"){ //el día actual necesita una animación ligeramente distinta debido a que el grosor adicional de su borde daba problemas con la animación normal
+                        clickedDay.className = "dia-actual-clicked"
+                    }else{
+                        clickedDay.className = "dia-clicked"
+                    }
                     setTimeout(()=>{clickedDay.className = diaType},200)
                 }
             })

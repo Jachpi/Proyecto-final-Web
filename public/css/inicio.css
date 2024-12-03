@@ -102,6 +102,7 @@ body {
     transform: scale(1.1);
     transition: 0.3s;
     z-index: 1;
+    cursor: pointer;
 }
 
 .event-list .dia,
@@ -110,6 +111,7 @@ body {
     display: flex;
     flex-direction: column;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 
@@ -129,11 +131,19 @@ body {
 }
 
 .event-list .dia-clicked {
-    animation: text-zoom-in-out 0.2s 1;
+    animation: zoom-in-out 0.2s 1;
     background-color: #5dd9ff;
 }
 
-@keyframes text-zoom-in-out {
+.event-list .dia-actual-clicked {
+    animation: zoom-in-out 0.2s 1;
+    background-color: #5dd9ff;
+    border-style: dashed;
+    border-width: 3px;
+    border-color: red;
+}
+
+@keyframes zoom-in-out {
     16.6% {transform: scale(0.9);}
     33.33% {transform: scale(0.8);}
     50% {transform: scale(0.75);}
