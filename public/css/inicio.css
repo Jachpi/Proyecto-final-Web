@@ -59,12 +59,13 @@ body {
     color: white;
 }
 
+/*Calendar css*/
 .event-list {
     column-gap: 2px;
     row-gap: 2px;
     display: grid;
     grid-template-columns: repeat(7, 14.2%);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: 3em repeat(6, 1fr);
     flex: 1; /*Toma todo el espacio disponible entre el topnav y el footer*/
     margin-top: 100px; /* Espacio para el topnav fijo*/
     padding: 20px;
@@ -81,24 +82,45 @@ body {
     list-style-type: none;
     padding: 10px;
     margin: 0;
-    margin-bottom: 20px;
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
-.event-list div:hover{
+.event-list .weekName {
+    background-color: tomato;
+    align-self: baseline;
+    color: white;
+}
+
+.event-list .dia:hover,
+.event-list .dia-actual:hover,
+.event-list .dia-mes-actual-pasado:hover{
     opacity: 1;
     background-color: #a9ebff;
+    transform: scale(1.1);
+    transition: 0.3s;
+    z-index: 1;
+}
+
+.event-list .dia,
+.event-list .dia-actual,
+.event-list .dia-mes-actual-pasado{
+    display: flex;
+    flex-direction: column;
     transition: 0.3s;
 }
 
-.event-list .dia-pasado {
+
+.event-list .dia-mes-actual-pasado {
+    background: rgb(203, 203, 203);
+}
+
+.event-list .dia-out-of-bounds {
     background: rgb(155, 155, 155);
 }
-.event-list .dia-pasado:hover {
-    background: rgb(155, 155, 155);
-}
+
 .event-list .dia-actual {
     border-style: dashed;
     border-width: 3px;
@@ -106,9 +128,18 @@ body {
     background-color: salmon;
 }
 
-.event12 {
-    grid-column: 4/5;
-    grid-row: 3/4;
+.event-list .dia-clicked {
+    animation: text-zoom-in-out 0.2s 1;
+    background-color: rgb(0, 255, 166);
+}
+
+@keyframes text-zoom-in-out {
+    16.6% {transform: scale(0.9);}
+    33.33% {transform: scale(0.8);}
+    50% {transform: scale(0.75);}
+    66.66% {transform: scale(0.8);}
+    83.33%{transform: scale(0.9);}
+    100%{transform: scale(1.0);}
 }
 
 /* Modal */

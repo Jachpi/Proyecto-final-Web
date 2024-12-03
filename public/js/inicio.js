@@ -5,22 +5,42 @@ let dia;
 
 
 function appendDays(dayAmount, offset, currDay){
+
+ 
     if (offset == 6){
         offset = -1
     }
-    for (let i = offset*(-1); i <= dayAmount; i++){
+    for (let i = offset*(-1); i <= 36; i++){
         dia = document.createElement("div")
         let dayTxt = document.createElement("p")
         dayTxt.innerHTML = i
-        if (i<=0 || currDay > i){
-            dia.className = "dia-pasado"
-        }else if (currDay != i){
-            dia.className = "dia"+String(i)
-            dia.appendChild(dayTxt)
+        let dailyEvents = document.createElement("p")
+        dailyEvents.innerHTML = "_________________"
+        if (i <= 0 || dayAmount < i ){
+            dia.className = "dia-out-of-bounds"
         }else{
-            dia.className = "dia-actual"
+            if (currDay > i){
+                dia.className = "dia-mes-actual-pasado"
+            }
+            else if (currDay != i){
+                dia.className = "dia"
+            }else{
+                dia.className = "dia-actual"
+            }
+            dia.addEventListener('click', (celda) => {
+                celda.stopPropagation() //previene que la animación pueda ser activada por sus hijos de forma individual
+                const clickedDay = celda.target
+                const diaType = clickedDay.className
+                if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
+                    clickedDay.className = "dia-clicked"
+                    setTimeout(()=>{clickedDay.className = diaType},200)
+                }
+            })
             dia.appendChild(dayTxt)
+                dia.appendChild(dailyEvents)
         }
+            
+        
 
         eventList.appendChild(dia)
     }
@@ -75,25 +95,25 @@ let diaOffset = 0
 
 switch (diaNum){
     case 1:
-        diaOffset = 1
+        diaOffset = 0
         break
     case 2:
-        diaOffset = 2
+        diaOffset = 1
         break
     case 3:
-        diaOffset = 3
+        diaOffset = 2
         break
     case 4:
-        diaOffset = 4
+        diaOffset = 3
         break
     case 5:
-        diaOffset = 5
+        diaOffset = 4
         break
     case 6:
-        diaOffset = 6
+        diaOffset = 5
         break
     case 0:
-        break
+        diaOffset = 6
 }
 
 if (month == 1){
