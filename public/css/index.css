@@ -161,9 +161,9 @@ body {
 
 
 @keyframes text-zoom-in-out {
-    0% {font-size: medium;}
-    25% {font-size: large;}
-    50% {font-size: larger;}
-    75% {font-size: large;}
-    100%{font-size: medium;}
+    0% {transform: scale(1.0);}
+    25% {transform: scale(1.1);}
+    50% {transform: scale(1.2);}
+    75% {transform: scale(1.1);}
+    100%{transform: scale(1.0);}
 }

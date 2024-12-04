@@ -1,8 +1,12 @@
 
 let eventList = document.getElementsByClassName("event-list")[0]
+let monthTextDisplay = document.getElementById("month-text-display")
+let leftButton = document.getElementById("move-left")
+let rightButton = document.getElementById("move-right")
+let checkBoxes = document.getElementsByClassName("radio")
+
 const now = new Date();
 let dia;
-let monthTextDisplay = document.getElementById("month-text-display")
 
 function appendDays(dayAmount, offset, currDay){
 
@@ -52,7 +56,7 @@ function appendDays(dayAmount, offset, currDay){
     }
 }
 
-const month = now.getMonth()
+let month = now.getMonth()
 let monthName = ""
 
 switch(month){
@@ -138,7 +142,15 @@ else{
 }
 
 
-
+leftButton.addEventListener('click', () => {
+    if (checkBoxes[0].checked){
+        //TODO
+    }else if (checkBoxes[1].checked){
+        //TODO
+    }else{
+        reduceMonth(month);
+    }
+})
 
 
 
