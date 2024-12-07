@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     IDUsuario INT PRIMARY KEY AUTO_INCREMENT,
     Username VARCHAR(100) UNIQUE NOT NULL,
     Password VARCHAR(100) NOT NULL,
-    Rol ENUM('Estudiante', 'Profesor', 'Coordinador', 'Dirección') NOT NULL,
+    Rol ENUM('Estudiante', 'Profesor', 'Coordinador', 'Dirección', 'Admin') NOT NULL,
     Email VARCHAR(100) NOT NULL);
 
 -- Imagen será una URL o ruta dentro del propio servidor
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     IDUsuario INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT UNIQUE NOT NULL,
     Password TEXT NOT NULL,
-    Rol TEXT CHECK(Rol IN ('Estudiante', 'Profesor', 'Coordinador', 'Dirección')) NOT NULL,
+    Rol TEXT CHECK(Rol IN ('Estudiante', 'Profesor', 'Coordinador', 'Dirección', 'Admin')) NOT NULL,
     Email TEXT NOT NULL
 );
 
