@@ -99,7 +99,6 @@ function increaseMonth(){
 }
 
 function displayMonth(){
-    let monthName = ""
     switch(monthSelected){
         case 0:
             monthName = "January"
@@ -138,51 +137,68 @@ function displayMonth(){
             monthName = "December"
             break
     }
-    let primerDiaDeMes = new Date()
-    primerDiaDeMes.setMonth(monthSelected)
-    primerDiaDeMes.setFullYear(yearSelected)
-    primerDiaDeMes.setDate(1)
-    console.log(primerDiaDeMes)
-    monthTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(primerDiaDeMes) //para pasar el mes de hoy a español
+    let fechaRelativa = new Date()
+    fechaRelativa.setMonth(monthSelected)
+    fechaRelativa.setFullYear(yearSelected)
+    fechaRelativa.setDate(now.getDate())
+    console.log(fechaRelativa)
+    monthTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) //para pasar el mes de hoy a español
     
-    let diaNum = primerDiaDeMes.getDay()
+    let diaNum = fechaRelativa.getDay()
     console.log(diaNum)
     let diaOffset = 0
     
     switch (diaNum){
         case 1:
-            diaOffset = 6
-            break
-        case 2:
             diaOffset = 0
             break
-        case 3:
+        case 2:
             diaOffset = 1
             break
-        case 4:
+        case 3:
             diaOffset = 2
             break
-        case 5:
+        case 4:
             diaOffset = 3
             break
-        case 6:
+        case 5:
             diaOffset = 4
             break
-        case 0:
+        case 6:
             diaOffset = 5
+            break
+        case 0:
+            diaOffset = 6
     }
     
     if (monthSelected == 1){
         //Feb >:(
-        appendDays(28, diaOffset, now.getDate())
+
+        let bisiesto = false
+
+        if (yearSelected % 4 == 0){
+            if(yearSelected % 100 == 0){
+                if(yearSelected % 400 == 0){
+                    bisiesto = true
+                }
+            }else{
+                bisiesto = true
+            }
+        }
+        if (bisiesto){
+            appendDays(29, diaOffset, fechaRelativa.getDate())
+        }else{
+            appendDays(28, diaOffset, fechaRelativa.getDate())
+        }
+
     }
     else if (monthSelected == 0 || monthSelected == 2 || monthSelected == 4 || monthSelected == 6 || monthSelected == 7 || monthSelected == 9 || monthSelected == 11){
         //31 days
-        appendDays(31, diaOffset, now.getDate())
+        appendDays(31, diaOffset, fechaRelativa.getDate())
     }
     else{
         //30 days
-        appendDays(30, diaOffset, now.getDate())
+        appendDays(30, diaOffset, fechaRelativa.getDate())
     }
 }
 
