@@ -9,6 +9,15 @@
 </head>
 
 <body>
+    <div class="topnav">
+        <h1>UEM Events</h1>
+        <nav>
+            <a class="active" href="#eventos">Eventos</a>
+            <a href="#contact">Contáctanos</a>
+            <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
+        </nav>
+    </div>
+
     <div class="search-tab">
         <input type="text" id="search" placeholder="Ingresa tu búsqueda">
         
@@ -18,68 +27,38 @@
         <input type="radio" id="EstaSemana" name="eventos" class="radio">
         <label for="EstaSemana" class="checkbox-label">Eventos esta semana</label>
         
-        <input type="radio" id="EsteMes" name="eventos" class="radio">
+        <input type="radio" id="EsteMes" name="eventos" class="radio" checked>
         <label for="EsteMes" class="checkbox-label">Eventos este mes</label>
     </div>
-    
 
-
-
-    <div class="topnav">
-        <h1>UEM Events</h1>
-        <a class="active" href="#eventos">Eventos</a>
-        <a href="#contact">Contáctanos</a>
-        <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
+    <div class = "pagination">
+        <button id = "move-left">🡐</button>
+        <p id = "month-text-display">Mes de hoy</p>
+        <button id = "move-right">🡒</button>
     </div>
 
     <div class="event-list">
-        <ul id="events">
-            <li>
-                <h3>Evento 1</h3>
-                <p>Descripción del evento 1</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 2</h3>
-                <p>Descripción del evento 2</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 3</h3>
-                <p>Descripción del evento 3</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 1</h3>
-                <p>Descripción del evento 1</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 2</h3>
-                <p>Descripción del evento 2</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 3</h3>
-                <p>Descripción del evento 3</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 1</h3>
-                <p>Descripción del evento 1</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 2</h3>
-                <p>Descripción del evento 2</p>
-                <button>Ver más</button>
-            </li>
-            <li>
-                <h3>Evento 3</h3>
-                <p>Descripción del evento 3</p>
-                <button>Ver más</button>
-            </li>
-        </ul>
+            <div class = "weekName">
+                Lunes
+            </div>
+            <div class = "weekName">
+                Martes
+            </div>
+            <div class = "weekName">
+                Miércoles
+            </div>
+            <div class = "weekName">
+                Jueves
+            </div>
+            <div class = "weekName">
+                Viernes
+            </div>
+            <div class = "weekName">
+                Sábado
+            </div>
+            <div class = "weekName">
+                Domingo
+            </div>
     </div>
 
     <!-- Checkbox para controlar la visibilidad del modal -->
@@ -97,21 +76,8 @@
     <footer id="contact">
         <p>Universidad Europea de Madrid</p>
         <p>Calle Tajo, s/n, 28670 Villaviciosa de Odón, Madrid</p>
-        <p> Contáctanos en nuestro <a href="mailto:europea@europea.es">email</a></p>
     </footer>
-
-    <!-- Modificar esto y meterlo en el codigo final de front, esto lo que hace es descheckear los filtros de eventos -->
-    <script>
-        window.addEventListener("load", () => {
-            // Obtener todos los radio buttons del grupo "eventos"
-            const radios = document.querySelectorAll('input[name="eventos"]');
-            // Desmarcar cada uno al cargar la página
-            radios.forEach(radio => radio.checked = false);
-        });
-    </script>
-
-
-
+    <script src = "js/inicio.js"></script>
 </body>
 
 </html>
