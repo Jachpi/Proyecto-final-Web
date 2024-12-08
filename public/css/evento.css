@@ -1,0 +1,42 @@
+body{
+    background-color: salmon;
+}
+.eventContainer {
+    display: grid;
+    grid-template-columns: 400px auto 150px;
+    
+    margin: 100px 150px;
+    
+    
+    
+    
+   
+}
+.eventContainer div {
+    background-color: white;
+    
+}
+
+
+.imagen {
+    grid-row: 1 / 9;
+}
+.imagen img{
+    width: 400px;
+    object-fit: fill;
+}
+.titulo{
+    grid-column: 2/4;
+}
+.item{
+    grid-column: 2/4;
+}
+
+.qr img{
+
+    width: 150px;
+    height:150px;
+    object-fit: cover;
+    
+}
+
