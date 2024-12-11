@@ -15,6 +15,7 @@ body{
 .eventContainer div {
     background-color: white;
     
+    
 }
 
 
@@ -27,6 +28,7 @@ body{
 }
 .titulo{
     grid-column: 2/4;
+    
 }
 .item{
     grid-column: 2/4;
