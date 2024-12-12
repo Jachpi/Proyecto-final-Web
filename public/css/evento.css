@@ -80,17 +80,18 @@ header {
 }
 
 .eventContainer {
+    position: relative; 
     display: grid;
     background-color: white;
-    grid-template-columns: 400px auto 150px;
+    grid-template-columns: 400px auto;
     height: max-content;
     width: 80%;
     margin: 100px auto;
     border-radius: 10px;
     margin-top: 10%;
     min-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .fecha-hora {
     display: flex;
     gap: 10px; /* Espacio entre fecha y hora */
@@ -116,13 +117,29 @@ header {
     grid-column: 2/4;
 }
 
-.qr img{
-
-    width: 150px;
-    height:150px;
-    object-fit: cover;
+.qr {
+    position: absolute; 
+    bottom: 10px;
+    right: 10px;
+    transition: opacity 0.5s ease; 
     
 }
+
+.qr:hover {
+    opacity: 0; 
+    
+}
+
+.qr img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    pointer-events: none;
+}
+
+
+
 
 
 /* Modal */
