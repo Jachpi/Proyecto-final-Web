@@ -3,58 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Formulario de Evento</title>
     <link rel="stylesheet" href="css/eventof.css">
 </head>
 <body>
-    <form>
-    <div class="eventContainer">
-        
-        <div class="imagen">
-            <img src="./Images/placeholder.jpg">
-        </div>
-        <div class="titulo">
-            <label for="titulo">Título del evento:</label><br>
-            <input type="text" id="titulo" name="titulo">
-        </div>
-        <div class="item">
-            <label for="org">Nombre del organizador:</label><br>
-            <input type="text" id="org" name="org">
-        </div>
-        <div class="imginp">
-            <label for="imagen">Link a la imagen del evento:</label><br>
-            <input type="text" id="imginp" name="imginp">
-        </div>
-        <div class="item">
-            <!--Buscar como elegir un día(q no sea texto)-->
-            <label for="fecha">Fecha:</label><br>
-            <input type="text" id="fecha" name="fecha">
-        </div>
-        <div class="item">
-            <label for="horai">Hora de inicio:</label>
-            <input type="text" id="horai" name="horai">
-            <label for="horaf">Hora de fin:</label>
-            <input type="text" id="horaf" name="horaf">
-        </div>
-        <div class="item">
-            <label for="publico">Publico objetivo:</label><br>
-            <input type="text" id="publico" name="publico">
-        </div>
-        <div class="item">
-            <label for="desc">Descripcion:</label><br>
-            <input type="text" id="desc" name="desc">
-        </div>
-        <div class="item">
-            <label for="ubi">Ubicacion del evento:</label><br>
-            <input type="text" id="ubi" name="ubi">
-        </div>
-        <div class="subbtn">
-            <input type="submit" value="Submit">
-        </div>
-
-        
-
+    <div class="topnav">
+        <h1>UEM Events</h1>
+        <nav>
+            <a class="active" href="#eventos">Eventos</a>
+            <a href="#contact">Contáctanos</a>
+            <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
+        </nav>
     </div>
-    </form>
+    <div class="container">
+        <header class="topnav-container">
+            <h1>Organiza tu Evento</h1>
+        </header>
+
+        <form class="event-form">
+            <div class="form-section image-section">
+                <label for="image-upload" class="image-label">
+                    <img src="./img/placeholder.jpg" id="image-preview" alt="Event Placeholder">
+                </label>
+                <input type="file" id="image-upload" accept="image/*" class="image-input">
+            </div>
+
+            <div class="form-section">
+                <label for="titulo">Título del evento:</label>
+                <input type="text" id="titulo" name="titulo" placeholder="Título del evento" required>
+            </div>
+
+            <div class="form-section">
+                <label for="org">Nombre del organizador:</label>
+                <input type="text" id="org" name="org" placeholder="Nombre del organizador" required>
+            </div>
+
+            <div class="form-section">
+                <label for="fecha">Fecha del evento:</label>
+                <input type="date" id="fecha" name="fecha" required>
+            </div>
+
+            <div class="form-section">
+                <label for="horai">Hora de inicio:</label>
+                <input type="time" id="horai" name="horai">
+                <label for="horaf">Hora de fin:</label>
+                <input type="time" id="horaf" name="horaf">
+            </div>
+
+            <div class="form-section">
+                <label for="publico">Público objetivo:</label>
+                <input type="text" id="publico" name="publico" placeholder="Público objetivo">
+            </div>
+
+            <div class="form-section">
+                <label for="desc">Descripción del evento:</label>
+                <textarea id="desc" name="desc" rows="4" placeholder="Describe el evento..."></textarea>
+            </div>
+
+            <div class="form-section">
+                <label for="ubi">Ubicación del evento:</label>
+                <input type="text" id="ubi" name="ubi" placeholder="Dirección o ubicación">
+            </div>
+
+            <div class="form-section submit-section">
+                <input type="submit" value="Enviar">
+            </div>
+        </form>
+    </div>
+
+    <!-- Checkbox para controlar la visibilidad del modal -->
+    <input type="checkbox" id="modal-checkbox" class="modal-checkbox" />
+
+    <!-- Modal -->
+    <div class="modal">
+        <div class="modal-content">
+            <h2>Sobre Nosotros</h2>
+            <p>Somos un grupo de entusiastas de la Universidad Europea de Madrid, dedicados a organizar eventos para estudiantes.</p>
+            <label for="modal-checkbox" class="close-modal">Cerrar</label>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <p>Universidad Europea de Madrid</p>
+        <p>Calle Tajo, s/n, 28670 Villaviciosa de Odón, Madrid</p>
+    </footer>
 </body>
 </html>

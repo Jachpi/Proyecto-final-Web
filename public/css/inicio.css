@@ -34,6 +34,8 @@ body {
     text-decoration: none;
     padding: 10px 20px;
     margin: 0 5px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .topnav .modal-trigger {
@@ -42,6 +44,8 @@ body {
     cursor: pointer;
     padding: 10px 20px;
     display: inline-block;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 .topnav .modal-trigger:hover {
