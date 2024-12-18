@@ -10,6 +10,8 @@ body {
     background-color: #f3f4f6;; /* Light Salmon Background */
     color: #333;
     line-height: 1.6;
+    background-size: 150% 100%;
+    background-image: url('../img/background.jpg');
 }
 
 .topnav {

@@ -2,6 +2,9 @@ body{
     font-family: Arial, sans-serif;
     background: #f3f4f6;
     align-items: center;
+    background-size: 150% 180%;
+    background-position: 0% 1%;
+    background-image: url('../img/background.jpg');
 }
 
 header {
@@ -92,6 +95,7 @@ header {
     min-width: 800px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .fecha-hora {
     display: flex;
     gap: 10px; /* Espacio entre fecha y hora */
@@ -118,11 +122,12 @@ header {
 }
 
 .qr {
-    position: absolute; 
+    position: relative;
     bottom: 10px;
     right: 10px;
-    transition: opacity 0.5s ease; 
-    
+    transition: opacity 0.5s ease;
+    grid-column: 2/4;
+    text-align: end;
 }
 
 .qr:hover {
@@ -192,6 +197,7 @@ header {
 footer {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     background: salmon;
     color: white;

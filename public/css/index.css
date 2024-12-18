@@ -14,7 +14,6 @@ header {
     border-color: black;
     font-family: Arial, sans-serif;
     border-width: 3px;
-    border-radius: 10px;
 }
 
 
@@ -27,6 +26,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-size: 100%;
+    background-image: url('../img/background.jpg');
 }
 
 
