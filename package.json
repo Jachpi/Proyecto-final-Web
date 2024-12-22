@@ -9,9 +9,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "install": "^0.13.0",
     "npm": "^10.9.1",
     "sqlite": "^5.1.1",

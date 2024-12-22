@@ -1,64 +1,33 @@
-
-const { open } = require('sqlite');
-const sqlite3 = require('sqlite3');
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser')
-const app = express();
-const port = 3000;
+const session = require('express-session');
+const authRoutes = require('./routes/auth'); 
 const path = require('path');
-app.use(express.static("public"));
-app.use(express.urlencoded());
-app.use(cors());
-app.use(bodyParser.json());
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, '/index.html'));
-  });
+const app = express();
 
-  
-async function openDb () {
-  return open({
-    filename: 'sqlite.db',
-    driver: sqlite3.Database
-  })
-}
+// Configuración de sesiones
+app.use(session({
+  secret: 'secreto', 
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } 
+}));
 
-app.post('/log-in', async function(req,res) {
-  const { name, password } = req.body;
-  console.log(name)
-  try {
-      const db = await openDb();
-      const user = await db.get('SELECT * FROM Usuarios WHERE Username = ? AND Password = ?', [name, password]);
-      if (user) {
-          return res.status(200).send("Usuario logeado");
-      } else {
-          return res.status(404).send("Usuario o contraseña incorrecto");
-      }
-  }catch (err){
-      console.log(err)
-  }
-})
+// Middleware para parsear el cuerpo de las solicitudes
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.post('/sign-up', (req, res) => {
-  const {name, password, email, role} = req.body
-  const db = openDb();
-  const user = db.get("SELECT (Username) FROM Usuarios WHERE Username = ?",[name])
-  if(!user){
-      try{
-          db.post("INSERT INTO Usuarios (Username, Password, Email, Rol) values (?,?,?,?)",[name,password,email,role], (err) => {
-              if (err) throw err
-              return res.status(200).send("Usuario registrado")
-          })
-      }catch{
-          //
-      }
-  }else{
-      return res.status(404).send("Usuario ya existente")
-  }
-})
 
-app.listen(port, () => {
-    console.log(`Servidor escuchando en http://localhost:${port}`);
-  });
+app.use('/auth', authRoutes);
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Iniciar el servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor en puerto ${PORT}`);
+});

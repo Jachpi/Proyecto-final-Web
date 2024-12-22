@@ -168,3 +168,9 @@ body {
     75% {transform: scale(1.1);}
     100%{transform: scale(1.0);}
 }
+
+@media (max-width: 500px) {
+    .login-container, .modal-content {
+        width: 90%;
+    }
+}
