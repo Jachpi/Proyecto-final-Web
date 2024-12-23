@@ -1,20 +1,27 @@
 
 let eventList = document.getElementsByClassName("event-list")[0]
-let monthTextDisplay = document.getElementById("month-text-display")
+let dateTextDisplay = document.getElementById("month-text-display")
 let leftButton = document.getElementById("move-left")
 let rightButton = document.getElementById("move-right")
 let checkBoxes = document.getElementsByClassName("radio")
+
 
 const now = new Date();
 let monthSelected = now.getMonth();
 let yearSelected = now.getFullYear();
 let dia;
 
-function appendDays(dayAmount, offset, currDay, month = now.getMonth(), year = now.getFullYear()){
+function clearGrid(){
+    Array.from(eventList.children).forEach(child => {
+        if (!child.classList.contains('weekName')) {
+            eventList.removeChild(child);
+        }
+    });
+}
 
-    if (offset == 6){
-        offset = -1
-    }
+function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), year = now.getFullYear()){
+    clearGrid()
+    offset %= 7
     for (let i = offset*(-1); i <= 36; i++){
         dia = document.createElement("div")
         let dayTxt = document.createElement("p")
@@ -56,12 +63,10 @@ function appendDays(dayAmount, offset, currDay, month = now.getMonth(), year = n
                     setTimeout(()=>{clickedDay.className = diaType},200)
                 }
             })
-            dia.appendChild(dayTxt)
-                dia.appendChild(dailyEvents)
+            dia.appendChild(dayTxt) //se añade el contenido
+                dia.appendChild(dailyEvents) //se añaden los eventos
         }
-            
         
-
         eventList.appendChild(dia)
     }
 }
@@ -74,11 +79,6 @@ function reduceMonth(){
         monthSelected -= 1
     }
 
-    Array.from(eventList.children).forEach(child => {
-        if (!child.classList.contains('weekName')) {
-            eventList.removeChild(child);
-        }
-    });
     displayMonth()
 }
 
@@ -90,11 +90,6 @@ function increaseMonth(){
         monthSelected += 1
     }
 
-    Array.from(eventList.children).forEach(child => {
-        if (!child.classList.contains('weekName')) {
-            eventList.removeChild(child);
-        }
-    });
     displayMonth()
 }
 
@@ -142,34 +137,11 @@ function displayMonth(){
     fechaRelativa.setFullYear(yearSelected)
     fechaRelativa.setDate(now.getDate())
     console.log(fechaRelativa)
-    monthTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) //para pasar el mes de hoy a español
+    dateTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) //para pasar el mes de hoy a español
     
     let diaNum = fechaRelativa.getDay()
     console.log(diaNum)
-    let diaOffset = 0
-    
-    switch (diaNum){
-        case 1:
-            diaOffset = 0
-            break
-        case 2:
-            diaOffset = 1
-            break
-        case 3:
-            diaOffset = 2
-            break
-        case 4:
-            diaOffset = 3
-            break
-        case 5:
-            diaOffset = 4
-            break
-        case 6:
-            diaOffset = 5
-            break
-        case 0:
-            diaOffset = 6
-    }
+    let diaOffset = new Date(yearSelected, monthSelected, 1).getDay() + 5;
     
     if (monthSelected == 1){
         //Feb >:(
@@ -186,23 +158,77 @@ function displayMonth(){
             }
         }
         if (bisiesto){
-            appendDays(29, diaOffset, fechaRelativa.getDate())
+            appendMonthDays(29, diaOffset, fechaRelativa.getDate())
         }else{
-            appendDays(28, diaOffset, fechaRelativa.getDate())
+            appendMonthDays(28, diaOffset, fechaRelativa.getDate())
         }
 
     }
     else if (monthSelected == 0 || monthSelected == 2 || monthSelected == 4 || monthSelected == 6 || monthSelected == 7 || monthSelected == 9 || monthSelected == 11){
         //31 days
-        appendDays(31, diaOffset, fechaRelativa.getDate())
+        appendMonthDays(31, diaOffset, fechaRelativa.getDate())
     }
     else{
         //30 days
-        appendDays(30, diaOffset, fechaRelativa.getDate())
+        appendMonthDays(30, diaOffset, fechaRelativa.getDate())
     }
 }
 
+function reduceWeek(){
 
+}
+
+function increaseWeek(){
+
+}
+
+function appendWeekDays(){
+    clearGrid()
+    for (let i = 0; i <= 6; i++){
+        dia = document.createElement("div")
+        let dailyEvents = document.createElement("p")
+        dailyEvents.innerHTML = "_________________"
+        dia.className = "dia"
+        dia.addEventListener('click', (celda) => {
+            let clickedDay = celda.target
+            let diaType = clickedDay.className
+            if (clickedDay.tagName != "DIV"){ // Previene que la animación aplique a sus hijos (que son todos <p> en este caso)
+                clickedDay = clickedDay.parentElement
+                diaType = clickedDay.className
+            }
+            if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
+                if(clickedDay.className == "dia-actual"){ //el día actual necesita una animación ligeramente distinta debido a que el grosor adicional de su borde daba problemas con la animación normal
+                    clickedDay.className = "dia-actual-clicked"
+                }else{
+                    clickedDay.className = "dia-clicked"
+                }
+                setTimeout(()=>{clickedDay.className = diaType},200)
+            }
+        })
+            dia.appendChild(dailyEvents)
+            eventList.appendChild(dia)
+    }
+
+    
+}
+
+function displayWeek(){
+    dateTextDisplay = 
+    appendWeekDays()
+}
+
+
+function reduceDay(){
+
+}
+
+function increaseDay(){
+
+}
+
+function displayDay(){
+
+}
 
 
 
@@ -228,7 +254,23 @@ rightButton.addEventListener('click', () => {
     }
 })
 
+//Cambiar a formato día, semana, mes
 
+checkBoxes[0].addEventListener('click', ()=>{
+    displayDay()
+})
+
+checkBoxes[1].addEventListener('click', ()=>{
+    displayWeek()
+    eventList.style.gridTemplateRows = "3em repeat(1, 80%)"
+    eventList.style.rowGap = "5%"
+})
+
+checkBoxes[2].addEventListener('click', ()=>{
+    displayMonth()
+    eventList.style.gridTemplateRows = "3em repeat(6, 1fr)"
+    eventList.style.rowGap = "2px"
+})
 
 
 displayMonth() //carga el mes actual
