@@ -17,7 +17,6 @@ header {
 }
 
 
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -26,7 +25,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-size: 100%;
+    background-size: 100% 150%;
     background-image: url('../img/background.jpg');
 }
 
@@ -168,4 +167,10 @@ body {
     50% {transform: scale(1.2);}
     75% {transform: scale(1.1);}
     100%{transform: scale(1.0);}
+}
+
+@media (max-width: 500px) {
+    .login-container, .modal-content {
+        width: 90%;
+    }
 }

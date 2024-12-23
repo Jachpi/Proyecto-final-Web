@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     Username TEXT UNIQUE NOT NULL,
     Password TEXT NOT NULL,
     Rol TEXT CHECK(Rol IN ('Estudiante', 'Profesor', 'Coordinador', 'Dirección', 'Admin')) NOT NULL,
+    isApproved BOOLEAN NOT NULL,
     Email TEXT NOT NULL
 );
 
