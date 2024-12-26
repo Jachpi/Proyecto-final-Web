@@ -176,6 +176,7 @@ input[type="radio"]:checked + .checkbox-label {
     background-color: tomato;
     align-self: baseline;
     color: white;
+    text-align: center;
 }
 
 .event-list .dia:hover,
@@ -190,12 +191,12 @@ input[type="radio"]:checked + .checkbox-label {
 }
 
 .event-list .dia,
+.event-list .unique-dia,
 .event-list .dia-actual,
 .event-list .dia-mes-actual-pasado{
     display: flex;
     flex-direction: column;
     transition: 0.3s;
-    cursor: pointer;
 }
 
 
@@ -234,6 +235,7 @@ input[type="radio"]:checked + .checkbox-label {
     color: white;
     font-size: 16px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 @keyframes zoom-in-out {

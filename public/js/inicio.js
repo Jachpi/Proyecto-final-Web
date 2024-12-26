@@ -1,23 +1,25 @@
 
 let eventList = document.getElementsByClassName("event-list")[0]
-let dateTextDisplay = document.getElementById("month-text-display")
 let leftButton = document.getElementById("move-left")
 let rightButton = document.getElementById("move-right")
 let checkBoxes = document.getElementsByClassName("radio")
 
 
-const now = new Date();
-let monthSelected = now.getMonth();
-let yearSelected = now.getFullYear();
-let dia;
+const now = new Date(); //fecha fija
+let fechaRelativa = new Date() // fecha que variará
 
-function clearGrid(){
+function clearGrid(hideWeekName = false){
     Array.from(eventList.children).forEach(child => {
         if (!child.classList.contains('weekName')) {
             eventList.removeChild(child);
+        }else if (hideWeekName){
+            child.style.display = "none"
+        }else{
+            child.style.display = "flex"
         }
     });
 }
+
 
 function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), year = now.getFullYear()){
     clearGrid()
@@ -31,16 +33,16 @@ function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), yea
         if (i <= 0 || dayAmount < i ){
             dia.className = "dia-out-of-bounds"
         }else{
-            if(year > yearSelected){ //si es un año anterior
+            if(year > fechaRelativa.getFullYear()){ //si es un año anterior
                 dia.className = "dia-mes-actual-pasado"
             }
-            else if (year < yearSelected){ //si es un año posterior
+            else if (year < fechaRelativa.getFullYear()){ //si es un año posterior
                 dia.className = "dia"
             }else{
-                if (month > monthSelected || currDay > i){
+                if (month > fechaRelativa.getMonth() || currDay > i){
                     dia.className = "dia-mes-actual-pasado"
                 }
-                else if (year == yearSelected && month == monthSelected && currDay == i){
+                else if (year == fechaRelativa.getFullYear() && month == fechaRelativa.getMonth() && currDay == i){
                     dia.className = "dia-actual"
                 }else{
                     dia.className = "dia"
@@ -64,93 +66,48 @@ function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), yea
                 }
             })
             dia.appendChild(dayTxt) //se añade el contenido
-                dia.appendChild(dailyEvents) //se añaden los eventos
+            dia.appendChild(dailyEvents) //se añaden los eventos
         }
-        
         eventList.appendChild(dia)
     }
 }
 
 function reduceMonth(){
-    if (monthSelected == 0){
-        yearSelected -= 1
-        monthSelected = 11
+    if (fechaRelativa.getMonth() == 0){
+        fechaRelativa.setFullYear(fechaRelativa.getFullYear() - 1)
+        fechaRelativa.setMonth(11)
     }else{
-        monthSelected -= 1
+        fechaRelativa.setMonth(fechaRelativa.getMonth() - 1)
     }
-
-    displayMonth()
 }
 
 function increaseMonth(){
-    if (monthSelected == 11){
-        yearSelected += 1
-        monthSelected = 0
+    if (fechaRelativa.getMonth() == 11){
+        fechaRelativa.setFullYear(fechaRelativa.getFullYear() + 1)
+        fechaRelativa.setMonth(0)
     }else{
-        monthSelected += 1
+        fechaRelativa.setMonth(fechaRelativa.getMonth() + 1)
     }
-
-    displayMonth()
 }
 
 function displayMonth(){
-    switch(monthSelected){
-        case 0:
-            monthName = "January"
-            break
-        case 1:
-            monthName = "February"
-            break
-        case 2:
-            monthName = "March"
-            break
-        case 3:
-            monthName = "April"
-            break
-        case 4:
-            monthName = "May"
-            break
-        case 5:
-            monthName = "June"
-            break
-        case 6:
-            monthName = "July"
-            break
-        case 7:
-            monthName = "August"
-            break
-        case 8:
-            monthName = "September"
-            break
-        case 9:
-            monthName = "October"
-            break
-        case 10:
-            monthName = "November"
-            break
-        case 11:
-            monthName = "December"
-            break
-    }
-    let fechaRelativa = new Date()
-    fechaRelativa.setMonth(monthSelected)
-    fechaRelativa.setFullYear(yearSelected)
+    document.getElementById("move-left").style.display = "block"
+    document.getElementById("move-right").style.display = "block"
     fechaRelativa.setDate(now.getDate())
     console.log(fechaRelativa)
-    dateTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) //para pasar el mes de hoy a español
+    let dateTextDisplay = document.getElementById("date-text-display")
+    dateTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
     
-    let diaNum = fechaRelativa.getDay()
-    console.log(diaNum)
-    let diaOffset = new Date(yearSelected, monthSelected, 1).getDay() + 5;
+    let diaOffset = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), 1).getDay() + 5;
     
-    if (monthSelected == 1){
+    let monthLength //para 28, 29, 30 o 31 días
+    if (fechaRelativa.getMonth() == 1){
         //Feb >:(
 
         let bisiesto = false
-
-        if (yearSelected % 4 == 0){
-            if(yearSelected % 100 == 0){
-                if(yearSelected % 400 == 0){
+        if (fechaRelativa.getFullYear() % 4 == 0){
+            if(fechaRelativa.getFullYear() % 100 == 0){
+                if(fechaRelativa.getFullYear() % 400 == 0){
                     bisiesto = true
                 }
             }else{
@@ -158,37 +115,40 @@ function displayMonth(){
             }
         }
         if (bisiesto){
-            appendMonthDays(29, diaOffset, fechaRelativa.getDate())
+            monthLength = 29
         }else{
-            appendMonthDays(28, diaOffset, fechaRelativa.getDate())
+            monthLength = 28
         }
 
     }
-    else if (monthSelected == 0 || monthSelected == 2 || monthSelected == 4 || monthSelected == 6 || monthSelected == 7 || monthSelected == 9 || monthSelected == 11){
+    else if (fechaRelativa.getMonth() == 0 || fechaRelativa.getMonth() == 2 || fechaRelativa.getMonth() == 4 || fechaRelativa.getMonth() == 6 || fechaRelativa.getMonth() == 7 || fechaRelativa.getMonth() == 9 || fechaRelativa.getMonth() == 11){
         //31 days
-        appendMonthDays(31, diaOffset, fechaRelativa.getDate())
+        monthLength = 31
     }
     else{
         //30 days
-        appendMonthDays(30, diaOffset, fechaRelativa.getDate())
+        monthLength = 30
     }
-}
-
-function reduceWeek(){
-
-}
-
-function increaseWeek(){
-
+    appendMonthDays(monthLength, diaOffset, now.getDate())
 }
 
 function appendWeekDays(){
     clearGrid()
-    for (let i = 0; i <= 6; i++){
+    const currDay = now.getDay()
+    let offsetDay = now.getDate() //para poner el número del día del mes
+    for (let i = 1; i <= 7; i++){
         dia = document.createElement("div")
+        let dayTxt = document.createElement("p")
+        dayTxt.innerHTML = offsetDay - currDay + i
         let dailyEvents = document.createElement("p")
         dailyEvents.innerHTML = "_________________"
-        dia.className = "dia"
+        if (i < currDay){
+            dia.className = "dia-mes-actual-pasado"
+        }else if (i == currDay){
+            dia.className = "dia-actual"
+        }else{
+            dia.className = "dia"
+        }
         dia.addEventListener('click', (celda) => {
             let clickedDay = celda.target
             let diaType = clickedDay.className
@@ -205,70 +165,92 @@ function appendWeekDays(){
                 setTimeout(()=>{clickedDay.className = diaType},200)
             }
         })
-            dia.appendChild(dailyEvents)
-            eventList.appendChild(dia)
+        dia.appendChild(dayTxt)
+        dia.appendChild(dailyEvents)
+        eventList.appendChild(dia)
     }
 
     
 }
 
 function displayWeek(){
-    dateTextDisplay = 
+    document.getElementById("move-left").style.display = "none"
+    document.getElementById("move-right").style.display = "none"
+    let dateTextDisplay = document.getElementById("date-text-display")
+    dateTextDisplay.innerHTML = ""
     appendWeekDays()
 }
 
-
 function reduceDay(){
-
+    fechaRelativa.setTime(fechaRelativa.getTime() - (24*60*60*1000));
+    displayDay()
 }
 
 function increaseDay(){
-
+    fechaRelativa.setTime(fechaRelativa.getTime() + (24*60*60*1000));
+    displayDay()
 }
 
 function displayDay(){
+    clearGrid(true)
+    document.getElementById("move-left").style.display = "block"
+    document.getElementById("move-right").style.display = "block"
 
+    let dateTextDisplay = document.getElementById("date-text-display")
+    dateTextDisplay.innerHTML = fechaRelativa.getDate() + " / " +new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
+
+    let dia = document.createElement("div")
+    dia.className = "unique-dia"
+    dia.style.gridColumn = 2
+    dia.style.height = "100vh"
+    eventList.appendChild(dia)
 }
 
 
-
+//identificar el display actual del calendario antes de cambiar
 leftButton.addEventListener('click', () => {
     if (checkBoxes[0].checked){
-        //TODO
-    }else if (checkBoxes[1].checked){
-        //TODO
+        reduceDay()
     }else{
-        reduceMonth(monthSelected);
-        console.log(monthSelected+"-"+yearSelected)
+        reduceMonth();
+        displayMonth()
+        console.log(fechaRelativa.getMonth()+"-"+fechaRelativa.getFullYear())
     }
 })
 
+//identificar el display actual del calendario antes de cambiar
 rightButton.addEventListener('click', () => {
     if (checkBoxes[0].checked){
-        //TODO
-    }else if (checkBoxes[1].checked){
-        //TODO
+        increaseDay()
     }else{
-        increaseMonth(monthSelected);
-        console.log(monthSelected+"-"+yearSelected)
+        increaseMonth();
+        displayMonth()
+        console.log(fechaRelativa.getMonth()+"-"+fechaRelativa.getFullYear())
     }
 })
 
 //Cambiar a formato día, semana, mes
 
 checkBoxes[0].addEventListener('click', ()=>{
+    fechaRelativa.setTime(now.getTime())
     displayDay()
+    eventList.style.gridTemplateRows = "5% 80%"
+    eventList.style.gridTemplateColumns = "1fr 2fr 1fr"
 })
 
 checkBoxes[1].addEventListener('click', ()=>{
+    fechaRelativa.setTime(now.getTime())
     displayWeek()
     eventList.style.gridTemplateRows = "3em repeat(1, 80%)"
+    eventList.style.gridTemplateColumns = "repeat(7, 14.2%)"
     eventList.style.rowGap = "5%"
 })
 
 checkBoxes[2].addEventListener('click', ()=>{
+    fechaRelativa.setTime(now.getTime())
     displayMonth()
     eventList.style.gridTemplateRows = "3em repeat(6, 1fr)"
+    eventList.style.gridTemplateColumns = "repeat(7, 14.2%)"
     eventList.style.rowGap = "2px"
 })
 
