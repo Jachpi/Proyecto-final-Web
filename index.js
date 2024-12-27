@@ -26,8 +26,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.post('/calendar/month-items', (req,res) => {
+  console.log("info")
+  let info = "texto"
+  res.json({success: true, info});
+});
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor en puerto ${PORT}`);
 });
+

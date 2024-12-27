@@ -1,5 +1,5 @@
 
-let eventList = document.getElementsByClassName("event-list")[0]
+let eventList = document.getElementById("event-list")
 let leftButton = document.getElementById("move-left")
 let rightButton = document.getElementById("move-right")
 let checkBoxes = document.getElementsByClassName("radio")
@@ -8,6 +8,7 @@ let checkBoxes = document.getElementsByClassName("radio")
 const now = new Date(); //fecha fija
 let fechaRelativa = new Date() // fecha que variará
 
+//borra y modifica el grid
 function clearGrid(hideWeekName = false){
     Array.from(eventList.children).forEach(child => {
         if (!child.classList.contains('weekName')) {
@@ -20,10 +21,11 @@ function clearGrid(hideWeekName = false){
     });
 }
 
-
+//Adición de los días del mes tras identificar el mes y el año
 function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), year = now.getFullYear()){
     clearGrid()
     offset %= 7
+    const eventsForDisplay = getEvents(fechaRelativa.getFullYear(), fechaRelativa.getMonth())
     for (let i = offset*(-1); i <= 36; i++){
         dia = document.createElement("div")
         let dayTxt = document.createElement("p")
@@ -72,6 +74,7 @@ function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), yea
     }
 }
 
+//reducir día del mes en 1
 function reduceMonth(){
     if (fechaRelativa.getMonth() == 0){
         fechaRelativa.setFullYear(fechaRelativa.getFullYear() - 1)
@@ -81,6 +84,7 @@ function reduceMonth(){
     }
 }
 
+//aumentar el día del mes en 1
 function increaseMonth(){
     if (fechaRelativa.getMonth() == 11){
         fechaRelativa.setFullYear(fechaRelativa.getFullYear() + 1)
@@ -90,6 +94,7 @@ function increaseMonth(){
     }
 }
 
+//Identificación y cálculo del mes que toca representar
 function displayMonth(){
     document.getElementById("move-left").style.display = "block"
     document.getElementById("move-right").style.display = "block"
@@ -132,6 +137,7 @@ function displayMonth(){
     appendMonthDays(monthLength, diaOffset, now.getDate())
 }
 
+//Inserción de los 7 días de la semana actual
 function appendWeekDays(){
     clearGrid()
     const currDay = now.getDay()
@@ -173,6 +179,7 @@ function appendWeekDays(){
     
 }
 
+//Identificación de la semana actual
 function displayWeek(){
     document.getElementById("move-left").style.display = "none"
     document.getElementById("move-right").style.display = "none"
@@ -181,16 +188,19 @@ function displayWeek(){
     appendWeekDays()
 }
 
+//reducir el día en 1
 function reduceDay(){
     fechaRelativa.setTime(fechaRelativa.getTime() - (24*60*60*1000));
     displayDay()
 }
 
+//aumentar el día en 1
 function increaseDay(){
     fechaRelativa.setTime(fechaRelativa.getTime() + (24*60*60*1000));
     displayDay()
 }
 
+//Representación del día actual
 function displayDay(){
     clearGrid(true)
     document.getElementById("move-left").style.display = "block"
@@ -230,7 +240,6 @@ rightButton.addEventListener('click', () => {
 })
 
 //Cambiar a formato día, semana, mes
-
 checkBoxes[0].addEventListener('click', ()=>{
     fechaRelativa.setTime(now.getTime())
     displayDay()
@@ -255,4 +264,27 @@ checkBoxes[2].addEventListener('click', ()=>{
 })
 
 
-displayMonth() //carga el mes actual
+displayMonth() //carga el mes actual en un prinicipio
+getEvents()
+
+async function getEvents(year, month, day = -1){
+    try {
+        const response = await fetch('/calendar/month-items', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({year, month, day}),//TODO: Añadir los días para los que se quiere recuperar eventos
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+            console.log(data)
+        } else {
+            console.error('Error durante la obtención de eventos: ', response);
+        }
+    } catch (error) {
+        console.error('Error durante la obtención de eventos: ', error);
+    }
+}

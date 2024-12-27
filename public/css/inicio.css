@@ -110,11 +110,12 @@ input[type="radio"]:checked + .checkbox-label {
 .pagination{
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     align-content: center;
     padding-right: 1em;
-    margin: 10px;
+    padding-left: 1em;
+    margin: auto;
     width: 99%;
     max-width: 95%;
     max-height: 10em;
@@ -143,7 +144,7 @@ input[type="radio"]:checked + .checkbox-label {
 }
 
 /*Calendar css*/
-.event-list {
+#event-list {
     column-gap: 2px;
     row-gap: 2px;
     display: grid;
@@ -157,7 +158,7 @@ input[type="radio"]:checked + .checkbox-label {
     position: relative;
 }
 
-.event-list div {
+#event-list div {
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -172,16 +173,28 @@ input[type="radio"]:checked + .checkbox-label {
     position: relative;
 }
 
-.event-list .weekName {
+#event-list .weekName {
     background-color: tomato;
     align-self: baseline;
     color: white;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
-.event-list .dia:hover,
-.event-list .dia-actual:hover,
-.event-list .dia-mes-actual-pasado:hover{
+#date-text-display{
+    background-color: tomato;
+    align-self: stretch;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    margin: 0px 1.5vw;
+    padding: 5px;
+}
+
+#event-list .dia:hover,
+#event-list .dia-actual:hover,
+#event-list .dia-mes-actual-pasado:hover{
     opacity: 1;
     background-color: #a9ebff;
     transform: scale(1.1);
@@ -190,37 +203,37 @@ input[type="radio"]:checked + .checkbox-label {
     cursor: pointer;
 }
 
-.event-list .dia,
-.event-list .unique-dia,
-.event-list .dia-actual,
-.event-list .dia-mes-actual-pasado{
+#event-list .dia,
+#event-list .unique-dia,
+#event-list .dia-actual,
+#event-list .dia-mes-actual-pasado{
     display: flex;
     flex-direction: column;
     transition: 0.3s;
 }
 
 
-.event-list .dia-mes-actual-pasado {
+#event-list .dia-mes-actual-pasado {
     background: rgb(203, 203, 203);
 }
 
-.event-list .dia-out-of-bounds {
+#event-list .dia-out-of-bounds {
     background: rgb(155, 155, 155);
 }
 
-.event-list .dia-actual {
+#event-list .dia-actual {
     border-style: dashed;
     border-width: 3px;
     border-color: red;
     background-color: salmon;
 }
 
-.event-list .dia-clicked {
+#event-list .dia-clicked {
     animation: zoom-in-out 0.2s 1;
     background-color: #5dd9ff;
 }
 
-.event-list .dia-actual-clicked {
+#event-list .dia-actual-clicked {
     animation: zoom-in-out 0.2s 1;
     background-color: #5dd9ff;
     border-style: dashed;
