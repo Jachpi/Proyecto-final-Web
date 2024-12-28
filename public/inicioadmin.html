@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdminHome</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="topnav">
+        <h1>UEM Events</h1>
+        <nav>
+            <a class="active" href="#eventos">Eventos</a>
+            <a href="#contact">Contáctanos</a>
+            <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
+        </nav>
+    </div>
+    <!--Lista de eventos-->
+    <div class="list">
+        <div class="event">
+            <p><b>Titulo</b></p>
+            <p>fecha y hora</p>
+            <button id="accept">Aceptar</button>
+            <button id="reject">Rechazar</button>
+    
+        </div>
+    </div>
+
+
+
+       <!-- Checkbox para controlar la visibilidad del modal -->
+       <input type="checkbox" id="modal-checkbox" class="modal-checkbox" />
+
+       <!-- Modal -->
+       <div class="modal">
+           <div class="modal-content">
+               <h2>Sobre Nosotros</h2>
+               <p>Somos un grupo de entusiastas de la Universidad Europea de Madrid, dedicados a organizar eventos para estudiantes.</p>
+               <label for="modal-checkbox" class="close-modal">Cerrar</label>
+           </div>
+       </div>
+   
+       <footer id="contact">
+           <p>Universidad Europea de Madrid</p>
+           <p>Calle Tajo, s/n, 28670 Villaviciosa de Odón, Madrid</p>
+       </footer>
+
+
+    
+</body>
+</html>
