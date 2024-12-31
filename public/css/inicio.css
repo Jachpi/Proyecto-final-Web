@@ -192,6 +192,21 @@ input[type="radio"]:checked + .checkbox-label {
     padding: 5px;
 }
 
+.dayNumber{
+    align-content: flex-start;
+    height: 1em;
+    margin-top: 5px;
+    align-self: center;
+}
+
+.eventText{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: hidden;
+    margin: 1px;
+    font-size:small;
+}
+
 #event-list .dia:hover,
 #event-list .dia-actual:hover,
 #event-list .dia-mes-actual-pasado:hover{
@@ -201,6 +216,7 @@ input[type="radio"]:checked + .checkbox-label {
     transition: 0.3s;
     z-index: 1;
     cursor: pointer;
+    align-items: flex-start;
 }
 
 #event-list .dia,
@@ -210,6 +226,7 @@ input[type="radio"]:checked + .checkbox-label {
     display: flex;
     flex-direction: column;
     transition: 0.3s;
+    align-items: flex-start;
 }
 
 
@@ -231,6 +248,7 @@ input[type="radio"]:checked + .checkbox-label {
 #event-list .dia-clicked {
     animation: zoom-in-out 0.2s 1;
     background-color: #5dd9ff;
+    align-items: flex-start;
 }
 
 #event-list .dia-actual-clicked {
@@ -239,6 +257,7 @@ input[type="radio"]:checked + .checkbox-label {
     border-style: dashed;
     border-width: 3px;
     border-color: red;
+    align-items: flex-start;
 }
 #addevent{
     margin: 0 44%;

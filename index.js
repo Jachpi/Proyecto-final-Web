@@ -5,6 +5,7 @@ const path = require('path');
 
 const app = express();
 
+
 // Configuración de sesiones
 app.use(session({
   secret: 'secreto', 
@@ -17,7 +18,6 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use('/auth', authRoutes);
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,11 +26,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/calendar/month-items', (req,res) => {
-  console.log("info")
-  let info = "texto"
-  res.json({success: true, info});
-});
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
