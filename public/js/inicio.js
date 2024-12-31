@@ -321,7 +321,7 @@ displayMonth() //cargar el mes actual al inicio de la carga de la página
 
 async function getEvents(date, type = "day"){
     try {
-        const response = await fetch('auth/calendar/items', {
+        const response = await fetch('evento/calendar/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
