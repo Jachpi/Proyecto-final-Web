@@ -11,7 +11,5 @@ router.post('/signup', authController.signup);
 // Ruta para logout
 router.post('/logout', authController.logout);
 
-// Ruta para obtener eventos
-router.post('/calendar/items', authController.events)
 
 module.exports = router;
