@@ -17,6 +17,18 @@ const Evento = {
         
         return callback(null, res)
     })
+  },
+  crearEvento: (evento, callback) => {
+    db.run('INSERT INTO Evento (Nombre, Descripcion, Imagen, FechaHora, IDOwner, Categoria, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [evento.nombre, evento.descripcion, evento.imagen, evento.fechaHora, evento.idOwner, evento.categoria, evento.estado],
+      (err) => {
+        if (err) {
+          console.error('Error en la consulta SQL:', err.message);
+          return callback(err);
+        }
+
+        return callback(null);
+    });
   }
 };
 

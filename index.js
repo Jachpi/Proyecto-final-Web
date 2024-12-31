@@ -28,9 +28,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+
+
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor en puerto ${PORT}`);
+  console.log(`Servidor en http://localhost:${PORT}`);
 });
 
