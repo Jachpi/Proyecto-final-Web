@@ -71,27 +71,14 @@ body {
     border: 1px solid #ccc;
     font-size: 16px;
 }
-.search-tab input[type="radio"] {
-    display: none; /* Oculta los radio buttons */
-}
-.checkbox-label {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-right: 10px;
-    margin-left: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
-    user-select: none;
-}
-input[type="radio"]:checked + .checkbox-label {
-    background-color: #007BFF;
-    border-color: #0056b3;
+.search-tab button{
+    background-color: #b72323;
     color: white;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
-.checkbox-label:hover {
+.search-tab button:hover {
     background-color: #a9ebff;
     border-color: #bbb;
 }
@@ -114,6 +101,15 @@ input[type="radio"]:checked + .checkbox-label {
 .event p{
     margin: 0 35% 0 0;
     
+}
+#addevent{
+    margin: 5% 44%;
+    padding: 10px 0;
+    background-color: #b72323;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 /* Modal */
 .modal-checkbox {
