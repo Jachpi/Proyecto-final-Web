@@ -102,6 +102,13 @@ function appendMonthDays(dayAmount, offset, currDay){
                         clickedDay = clickedDay.parentElement
                         diaType = clickedDay.className
                     }
+                    setTimeout(()=>{
+                        fechaRelativa.setDate(i)
+                        checkBoxes[0].checked = true
+                        displayDay()
+                        eventList.style.gridTemplateRows = "5% 80%"
+                        eventList.style.gridTemplateColumns = "1fr 2fr 1fr"
+                    },250)
                     if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
                         if(clickedDay.className == "dia-actual"){ //el día actual necesita una animación ligeramente distinta debido a que el grosor adicional de su borde daba problemas con la animación normal
                             clickedDay.className = "dia-actual-clicked"
@@ -276,6 +283,21 @@ async function appendWeekDays(){
                 clickedDay = clickedDay.parentElement
                 diaType = clickedDay.className
             }
+            setTimeout(()=>{
+                if (dayValue <= 0){
+                    fechaRelativa.setDate(lastMonthLength+dayValue)
+                    fechaRelativa.setMonth(lastMonth.getMonth())
+                }else if(dayValue > monthLength){
+                    fechaRelativa.setDate(dayValue-monthLength)
+                    fechaRelativa.setMonth(nextMonth.getMonth())
+                }else{
+                    fechaRelativa.setDate(dayValue)
+                }
+                checkBoxes[0].checked = true
+                displayDay()
+                eventList.style.gridTemplateRows = "5% 80%"
+                eventList.style.gridTemplateColumns = "1fr 2fr 1fr"
+            },250)
             if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
                 if(clickedDay.className == "dia-actual"){ //el día actual necesita una animación ligeramente distinta debido a que el grosor adicional de su borde daba problemas con la animación normal
                     clickedDay.className = "dia-actual-clicked"
@@ -324,6 +346,7 @@ function displayDay(){
     let dia = document.createElement("div")
     dia.className = "unique-dia"
     dia.style.gridColumn = 2
+    dia.style.rowGap = '0.5em'
     dia.style.height = "80vh"
     dia.style.overflow = "visible"
     eventList.appendChild(dia)
@@ -331,13 +354,29 @@ function displayDay(){
     getEvents(fechaRelativa, "day").then(listaEventos => {
         listaEventos.forEach((evento) =>{
             let obj = document.createElement("div")
-            obj.className = "dia"
-            let matchText = evento['FechaHora']
-            let hourMatch = matchText.match(/\d+:\d+/gm)
+            console.log(typeof evento['FechaHora'])
+            const startHourMatch = evento['FechaHora'].match(/\d+:\d+/gm)[0]
+            const endHourMatch = evento['FechaHoraFin'].match(/\d+:\d+/gm)[0]
+            const [h1, m1] = startHourMatch.split(':').map(Number);
+            const fechaInicio = new Date(fechaRelativa.getFullYear(),fechaRelativa.getMonth(),fechaRelativa.getDate(),h1,m1,0);
+            const [h2, m2] = endHourMatch.split(':').map(Number);
+            const fechaFin = new Date(fechaRelativa.getFullYear(),fechaRelativa.getMonth(),fechaRelativa.getDate(),h2,m2,0);
+            if (fechaInicio < now){
+                if (fechaFin > now){
+                    obj.className = "dia-actual"
+                }else{
+                    obj.className = "dia-mes-actual-pasado"
+                }
+            }else{
+                obj.className = "dia"
+            }
+                        
             let nameP = document.createElement("p")
+            nameP.className = "eventText"
             nameP.innerHTML = evento["Nombre"]
             let timeP = document.createElement("p")
-            timeP.innerHTML = "("+hourMatch+")"
+            timeP.className = "eventText"
+            timeP.innerHTML = "("+startHourMatch+'-'+endHourMatch+")"
             obj.addEventListener('click', (celda) => {
                 let clickedDay = celda.target
                 let diaType = clickedDay.className
