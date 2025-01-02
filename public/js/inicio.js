@@ -128,26 +128,22 @@ function appendMonthDays(dayAmount, offset, currDay){
 
 //reducir día del mes en 1
 function reduceMonth(){
-    console.log(fechaRelativa.getMonth())
     if (fechaRelativa.getMonth() == 0){
         fechaRelativa.setFullYear(fechaRelativa.getFullYear() - 1)
         fechaRelativa.setMonth(11)
     }else{
         fechaRelativa.setMonth(fechaRelativa.getMonth() - 1)
     }
-    console.log(fechaRelativa.getMonth())
 }
 
 //aumentar el día del mes en 1
 function increaseMonth(){
-    console.log(fechaRelativa.getMonth())
     if (fechaRelativa.getMonth() == 11){
         fechaRelativa.setFullYear(fechaRelativa.getFullYear() + 1)
         fechaRelativa.setMonth(0)
     }else{
         fechaRelativa.setMonth(fechaRelativa.getMonth() + 1)
     }
-    console.log(fechaRelativa.getMonth())
 }
 
 //Identificación y cálculo del mes que toca representar
@@ -354,7 +350,6 @@ function displayDay(){
     getEvents(fechaRelativa, "day").then(listaEventos => {
         listaEventos.forEach((evento) =>{
             let obj = document.createElement("div")
-            console.log(typeof evento['FechaHora'])
             const startHourMatch = evento['FechaHora'].match(/\d+:\d+/gm)[0]
             const endHourMatch = evento['FechaHoraFin'].match(/\d+:\d+/gm)[0]
             const [h1, m1] = startHourMatch.split(':').map(Number);
@@ -396,7 +391,6 @@ function displayDay(){
             obj.appendChild(nameP)
             obj.appendChild(timeP)
             dia.appendChild(obj)
-            console.log(evento)
         })
     }
     ).catch("Sucedió un error, inténtelo más tarde")
@@ -410,7 +404,6 @@ leftButton.addEventListener('click', () => {
     }else{
         reduceMonth()
         displayMonth()
-        console.log(fechaRelativa.getMonth()+"-"+fechaRelativa.getFullYear())
     }
 })
 
@@ -421,7 +414,6 @@ rightButton.addEventListener('click', () => {
     }else{
         increaseMonth();
         displayMonth()
-        console.log(fechaRelativa.getMonth()+"-"+fechaRelativa.getFullYear())
     }
 })
 
