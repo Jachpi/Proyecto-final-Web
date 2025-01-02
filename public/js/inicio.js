@@ -143,6 +143,19 @@ function increaseMonth(){
     console.log(fechaRelativa.getMonth())
 }
 
+//Identificación y cálculo del mes que toca representar
+function displayMonth(){
+    document.getElementById("move-left").style.display = "block"
+    document.getElementById("move-right").style.display = "block"
+    let dateTextDisplay = document.getElementById("date-text-display")
+    dateTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
+    
+    let diaOffset = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), 1).getDay() + 5;
+    
+    const monthLength = checkMonthLength(fechaRelativa)
+    appendMonthDays(monthLength, diaOffset, now.getDate())
+}
+
 function checkMonthLength(specificDate){
     if (specificDate.getMonth() == 1){
         //Feb >:(
@@ -169,19 +182,6 @@ function checkMonthLength(specificDate){
     else{
         return 30
     }
-}
-
-//Identificación y cálculo del mes que toca representar
-function displayMonth(){
-    document.getElementById("move-left").style.display = "block"
-    document.getElementById("move-right").style.display = "block"
-    let dateTextDisplay = document.getElementById("date-text-display")
-    dateTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
-    
-    let diaOffset = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), 1).getDay() + 5;
-    
-    const monthLength = checkMonthLength(fechaRelativa)
-    appendMonthDays(monthLength, diaOffset, now.getDate())
 }
 
 //Inserción de los 7 días de la semana actual
@@ -226,7 +226,6 @@ async function appendWeekDays(){
         }
         fechaActual.setHours(1) //NO BORRAR. Al parecer es necesario
         //Obtención de los eventos semanales
-        console.log(fechaActual)
         const eventsForDisplay = getEvents(fechaActual).then(eventosObtenidos => ({
             eventosObtenidos,
             dayNumb,
@@ -235,9 +234,7 @@ async function appendWeekDays(){
         promesas.push(eventsForDisplay)
     }
     //esperar a que todos los días hayan sido recibidos
-    console.log(promesas)
     const resultados = await Promise.all(promesas)
-    console.log(resultados)
 
     resultados.forEach(({eventosObtenidos, dayNumb, dayValue}) => {
         dia = document.createElement("div")
@@ -322,13 +319,48 @@ function displayDay(){
     document.getElementById("move-right").style.display = "block"
 
     let dateTextDisplay = document.getElementById("date-text-display")
-    dateTextDisplay.innerHTML = fechaRelativa.getDate() + " / " +new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
+    dateTextDisplay.innerHTML = fechaRelativa.getDate() + " / " + new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
 
     let dia = document.createElement("div")
     dia.className = "unique-dia"
     dia.style.gridColumn = 2
-    dia.style.height = "100vh"
+    dia.style.height = "80vh"
+    dia.style.overflow = "visible"
     eventList.appendChild(dia)
+
+    getEvents(fechaRelativa, "day").then(listaEventos => {
+        listaEventos.forEach((evento) =>{
+            let obj = document.createElement("div")
+            obj.className = "dia"
+            let matchText = evento['FechaHora']
+            let hourMatch = matchText.match(/\d+:\d+/gm)
+            let nameP = document.createElement("p")
+            nameP.innerHTML = evento["Nombre"]
+            let timeP = document.createElement("p")
+            timeP.innerHTML = "("+hourMatch+")"
+            obj.addEventListener('click', (celda) => {
+                let clickedDay = celda.target
+                let diaType = clickedDay.className
+                if (clickedDay.tagName != "DIV"){ // Previene que la animación aplique a sus hijos (que son todos <p> en este caso)
+                    clickedDay = clickedDay.parentElement
+                    diaType = clickedDay.className
+                }
+                if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
+                    if(clickedDay.className == "dia-actual"){ //el día actual necesita una animación ligeramente distinta debido a que el grosor adicional de su borde daba problemas con la animación normal
+                        clickedDay.className = "dia-actual-clicked"
+                    }else{
+                        clickedDay.className = "dia-clicked"
+                    }
+                    setTimeout(()=>{clickedDay.className = diaType},200)
+                }
+            })
+            obj.appendChild(nameP)
+            obj.appendChild(timeP)
+            dia.appendChild(obj)
+            console.log(evento)
+        })
+    }
+    ).catch("Sucedió un error, inténtelo más tarde")
 }
 
 

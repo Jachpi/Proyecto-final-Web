@@ -93,6 +93,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
     user-select: none;
+    text-align: center;
 }
 
 input[type="radio"]:checked + .checkbox-label {
@@ -216,7 +217,6 @@ input[type="radio"]:checked + .checkbox-label {
     transition: 0.3s;
     z-index: 1;
     cursor: pointer;
-    align-items: flex-start;
 }
 
 #event-list .dia,
@@ -226,9 +226,9 @@ input[type="radio"]:checked + .checkbox-label {
     display: flex;
     flex-direction: column;
     transition: 0.3s;
-    align-items: flex-start;
+    align-items: stretch;
+    justify-content: stretch;
 }
-
 
 #event-list .dia-mes-actual-pasado {
     background: rgb(203, 203, 203);
@@ -259,6 +259,8 @@ input[type="radio"]:checked + .checkbox-label {
     border-color: red;
     align-items: flex-start;
 }
+
+
 #addevent{
     margin: 0 44%;
     margin-bottom: 10px;
