@@ -30,12 +30,10 @@ function clearGrid(hideWeekName = false){
 }
 
 //Adición de los días del mes tras identificar el mes y el año
-function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), year = now.getFullYear()){
+function appendMonthDays(dayAmount, offset, currDay){
     clearGrid()
-    console.log(fechaRelativa)
     const eventsForDisplay = getEvents(fechaRelativa, "month")
     eventsForDisplay.then(eventosObtenidos => {
-        console.log(eventosObtenidos)
         offset %= 7
         if (offset == 6){
             offset = -1
@@ -45,14 +43,14 @@ function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), yea
             if (i <= 0 || dayAmount < i ){
                 dia.className = "dia-out-of-bounds"
             }else{
-                if(year > fechaRelativa.getFullYear()){ //si es un año anterior
+                if(now.getFullYear() > fechaRelativa.getFullYear()){ //si es un año anterior
                     dia.className = "dia-mes-actual-pasado"
                     let dayTxt = document.createElement("p")
                     dayTxt.className = "dayNumber"
                     dayTxt.innerHTML = i
                     dia.appendChild(dayTxt) //se añade el número del mes
                 }
-                else if (year < fechaRelativa.getFullYear()){ //si es un año posterior
+                else if (now.getFullYear() < fechaRelativa.getFullYear()){ //si es un año posterior
                     dia.className = "dia"
                     let dayTxt = document.createElement("p")
                     dayTxt.className = "dayNumber"
@@ -63,24 +61,38 @@ function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), yea
                     dayTxt.className = "dayNumber"
                     dayTxt.innerHTML = i
                     dia.appendChild(dayTxt) //se añade el contenido
-                    if (month > fechaRelativa.getMonth() || currDay > i){
+                    if (now.getMonth() > fechaRelativa.getMonth()){
                         dia.className = "dia-mes-actual-pasado"
-                    }
-                    else if (year == fechaRelativa.getFullYear() && month == fechaRelativa.getMonth() && currDay == i){
+                    }else if (now.getFullYear() == fechaRelativa.getFullYear() && now.getMonth() == fechaRelativa.getMonth() && currDay == i){
                         dia.className = "dia-actual"
+                    }else if (now.getMonth() == fechaRelativa.getMonth()){
+                        if (currDay < i){
+                            dia.className = "dia"
+                        }else{
+                            dia.className = "dia-mes-actual-pasado"
+                        }
                     }else{
                         dia.className = "dia"
                     }
-                    //Inserción de los eventos que toquen
-                    if (eventosObtenidos.length != 0){
-                        while(Number(eventosObtenidos[0]['FechaHora'].substring(9,10)) == i){
+                }
+                //Inserción de los eventos que toquen
+                try{
+                    let exit = false
+                    while(!exit && eventosObtenidos.length != 0){
+                        let matchText = eventosObtenidos[0]['FechaHora']
+                        let dateMatch = matchText.match(/(?<=\d{4}-\d{2}-)\d+/gm)
+                        if(dateMatch && Number(dateMatch[0]) == i){
                             let dailyEvents = document.createElement("p")
                             dailyEvents.className = "eventText"
                             dailyEvents.innerHTML = eventosObtenidos[0]['Nombre']
                             dia.appendChild(dailyEvents) //se añaden los eventos
                             eventosObtenidos.splice(0,1) //se borra del array ordenado
+                        }else{
+                            exit = true
                         }
                     }
+                }catch (ex){
+                    console.error(ex)
                 }
                 
                 dia.addEventListener('click', (celda) => {
@@ -103,7 +115,7 @@ function appendMonthDays(dayAmount, offset, currDay, month = now.getMonth(), yea
             }
             eventList.appendChild(dia)
         }
-    }).catch("algo pasó")
+    }).catch("algo pasó, inténtelo más tarde")
     
 }
 
@@ -163,7 +175,6 @@ function checkMonthLength(specificDate){
 function displayMonth(){
     document.getElementById("move-left").style.display = "block"
     document.getElementById("move-right").style.display = "block"
-    console.log(fechaRelativa)
     let dateTextDisplay = document.getElementById("date-text-display")
     dateTextDisplay.innerHTML = new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
     
@@ -174,7 +185,7 @@ function displayMonth(){
 }
 
 //Inserción de los 7 días de la semana actual
-function appendWeekDays(){
+async function appendWeekDays(){
     clearGrid()
     const currDay = now.getDay()
     let offsetDay = now.getDate() //para poner el número del día del mes
@@ -182,29 +193,81 @@ function appendWeekDays(){
     const lastMonth = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), fechaRelativa.getDate())
     if (fechaRelativa.getMonth() == 0){
         lastMonth.setMonth(11)
+        lastMonth.setFullYear(fechaRelativa.getFullYear() - 1)
     }else{
         lastMonth.setMonth(fechaRelativa.getMonth() - 1)
     }
+    //obtener mes posterior
+    const nextMonth = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), fechaRelativa.getDate())
+    if (fechaRelativa.getMonth() == 11){
+        nextMonth.setMonth(0)
+        nextMonth.setFullYear(fechaRelativa.getFullYear() + 1)
+    }else{
+        nextMonth.setMonth(fechaRelativa.getMonth() + 1)
+    }
+    //para ajustar valor número en caso de que la semana englobe días del mes anterior
     const lastMonthLength = checkMonthLength(lastMonth)
     const monthLength = checkMonthLength(fechaRelativa)
+    const promesas = []
     for (let i = 1; i <= 7; i++){
-        dia = document.createElement("div")
-        let dayTxt = document.createElement("p")
-        dayTxt.className = "dayNumber"
-        let dayNumb = offsetDay - currDay + i
-        
+        let fechaActual
+        let dayNumb = offsetDay - currDay + i //se recalcurará su valor para que no muestre números negativos o superiores a los que tiene un mes
+        let dayValue = dayNumb //se usará para evaluar si pasó el día o no
+        //ajustar número en caso de englobar días del mes anterior o posterior
         if(dayNumb <= 0){
             dayNumb += lastMonthLength
+            fechaActual = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), dayNumb)
         }else if(dayNumb >= monthLength + 1){
             dayNumb %= (monthLength + 1)
             dayNumb += 1
+            fechaActual = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), dayNumb)
+        }else{
+            fechaActual = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), dayNumb)
         }
+        fechaActual.setHours(1) //NO BORRAR. Al parecer es necesario
+        //Obtención de los eventos semanales
+        console.log(fechaActual)
+        const eventsForDisplay = getEvents(fechaActual).then(eventosObtenidos => ({
+            eventosObtenidos,
+            dayNumb,
+            dayValue
+        }))
+        promesas.push(eventsForDisplay)
+    }
+    //esperar a que todos los días hayan sido recibidos
+    console.log(promesas)
+    const resultados = await Promise.all(promesas)
+    console.log(resultados)
+
+    resultados.forEach(({eventosObtenidos, dayNumb, dayValue}) => {
+        dia = document.createElement("div")
+        let dayTxt = document.createElement("p")
         dayTxt.innerHTML = dayNumb
         let dailyEvents = document.createElement("p")
-        dailyEvents.innerHTML = "_________________"
-        if (i < currDay){
+        dayTxt.className = "dayNumber"
+        dia.appendChild(dayTxt)
+        //Inserción de los eventos que toquen
+        try{
+            let exit = false
+            while(!exit && eventosObtenidos.length != 0){
+                let matchText = eventosObtenidos[0]['FechaHora']
+                let dateMatch = matchText.match(/(?<=\d{4}-\d{2}-)\d+/gm)
+                if(dateMatch && Number(dateMatch[0]) == dayNumb){
+                    let dailyEvents = document.createElement("p")
+                    dailyEvents.className = "eventText"
+                    dailyEvents.innerHTML = eventosObtenidos[0]['Nombre']
+                    dia.appendChild(dailyEvents) //se añaden los eventos
+                    eventosObtenidos.splice(0,1) //se borra del array ordenado
+                }else{
+                    exit = true
+                }
+            }
+        }catch (ex){
+            console.error(ex)
+        }
+        if (dayValue < offsetDay){
             dia.className = "dia-mes-actual-pasado"
-        }else if (i == currDay){
+        }else if (dayValue == offsetDay){
             dia.className = "dia-actual"
         }else{
             dia.className = "dia"
@@ -225,12 +288,10 @@ function appendWeekDays(){
                 setTimeout(()=>{clickedDay.className = diaType},200)
             }
         })
-        dia.appendChild(dayTxt)
+        
         dia.appendChild(dailyEvents)
         eventList.appendChild(dia)
-    }
-
-    
+    })
 }
 
 //Identificación de la semana actual

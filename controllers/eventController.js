@@ -6,8 +6,10 @@ exports.events = (req, res) => {
     if (type == "month"){
       filteredDate = date.substring(0,7)
       console.log("Searching for events from", filteredDate+"-XX")
+    } else if(type == "day"){
+      filteredDate = date.substring(0,10)
+      console.log("Searching for events from", filteredDate)
     }
-  
     Event.getCalendarEvents(filteredDate, (err, events) => {
       if(err){
         return res.status(500).json({error: "Error interno del servidor"})
