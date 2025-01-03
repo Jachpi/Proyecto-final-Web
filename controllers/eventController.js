@@ -21,36 +21,48 @@ exports.events = (req, res) => {
 };
 
 exports.createEvent = (req, res) => {
-  console.log('req.body:', req.body);  // Debería tener { nombre, descripcion, fecha, horaInicio, horaFin, categoria, imagen, ... }
+  console.log('req.body:', req.body);
   console.log('Sesión en createEvent:', req.session);
 
   if (!req.session?.userId) {
     return res.status(401).json({ error: 'Usuario no autenticado' });
   }
 
-  const { nombre, descripcion, fecha, horaInicio, horaFin, categoria, imagen } = req.body;
+  // Extraemos los campos que llegan en el body
+  const { 
+    nombre, 
+    descripcion, 
+    imagen, 
+    fechaHora,      // p. ej. "2025-01-01 22:00:00"
+    fechaHoraFin, 
+    categoria 
+  } = req.body;
+
   const userId = req.session.userId;
 
-  if (fecha && new Date(fecha) < new Date()) {
-    return res.status(400).json({ error: 'La fecha del evento no puede ser anterior a hoy' });
+  // Verificar que la fechaHora no sea anterior a la fecha/hora actual
+  if (fechaHora) {
+    const fechaEvento = new Date(fechaHora);  // Convierto a objeto Date
+    const ahora = new Date();
+    
+    // Si el evento inicia antes que "ahora", regresamos error
+    if (fechaEvento < ahora) {
+      return res.status(400).json({ error: 'La fecha/hora del evento no puede ser anterior a la actual' });
+    }
   }
 
-  // Combinar fecha y horas:
-  const fechaHoraInicio = `${evento.fecha} ${evento.horaInicio}:00`;
-  const fechaHoraFin = `${evento.fecha} ${evento.horaFin}:00`;
-
+  // Construimos el objeto que insertaremos en la base de datos
   const nuevoEvento = {
     nombre,
     descripcion,
-    imagen: imagen || null, // Aquí tienes la cadena Base64 u otro texto
-    fechaHora: fechaHoraInicio,
-    fechaHoraFin: fechaHoraFin,
+    imagen: imagen || null,
+    fechaHora,
+    fechaHoraFin,
     idOwner: userId,
     categoria,
-    estado: 'Pendiente', // o lo que quieras
+    estado: 'Pendiente',
   };
 
-  // Insertar en la base de datos
   Event.crearEvento(nuevoEvento, (err) => {
     if (err) {
       console.error('Error en la consulta SQL:', err.message);
@@ -59,4 +71,3 @@ exports.createEvent = (req, res) => {
     return res.status(201).json({ success: true, message: 'Evento creado exitosamente' });
   });
 };
-
