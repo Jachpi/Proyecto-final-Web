@@ -464,3 +464,8 @@ async function getEvents(date, type = "day"){
         throw new Error(`Error grave durante la obtención de eventos: ${error}`)
     }
 }
+
+document.getElementById('addevent').addEventListener('click', function (event) {
+    event.preventDefault();
+    window.location.href = '/eventoform.html';
+});

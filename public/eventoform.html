@@ -15,70 +15,64 @@
             <label for="modal-checkbox" class="modal-trigger">Sobre Nosotros</label>
         </nav>
     </div>
+
     <div class="container">
         <header class="topnav-container">
             <h1>Organiza tu Evento</h1>
         </header>
 
-        <form class="event-form">
+        <form id="event-form" class="event-form" method="POST" enctype="multipart/form-data" action="/evento/create">
+            <!-- Imagen -->
             <div class="form-section image-section">
                 <label for="image-upload" class="image-label">
                     <img src="./img/placeholder.jpg" id="image-preview" alt="Event Placeholder">
                 </label>
-                <input type="file" id="image-upload" accept="image/*" class="image-input">
+                <input type="file" id="image-upload" accept="image/*" required>
             </div>
 
+            <!-- Nombre del evento -->
             <div class="form-section">
-                <label for="titulo">Título del evento:</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Título del evento" required>
+                <label for="nombre">Título del evento:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Título del evento" required>
             </div>
 
+            <!-- Descripción -->
             <div class="form-section">
-                <label for="org">Nombre del organizador:</label>
-                <input type="text" id="org" name="org" placeholder="Nombre del organizador" required>
+                <label for="descripcion">Descripción del evento:</label>
+                <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describe el evento..." required></textarea>
             </div>
 
+            <!-- Fecha y hora -->
             <div class="form-section">
                 <label for="fecha">Fecha del evento:</label>
                 <input type="date" id="fecha" name="fecha" required>
+
+                <label for="hora-inicio">Hora de inicio:</label>
+                <input type="time" id="hora-inicio" name="horaInicio" required>
+
+                <label for="hora-fin">Hora de fin:</label>
+                <input type="time" id="hora-fin" name="horaFin" required>
             </div>
 
+            <!-- Categoría -->
             <div class="form-section">
-                <label for="horai">Hora de inicio:</label>
-                <input type="time" id="horai" name="horai">
-                <label for="horaf">Hora de fin:</label>
-                <input type="time" id="horaf" name="horaf">
+                <label for="categoria">Categoría:</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="Evento para estudiantes">Evento para estudiantes</option>
+                    <option value="Evento para profesores">Evento para profesores</option>
+                    <option value="Evento para comunidad universitaria">Evento para comunidad universitaria</option>
+                </select>
             </div>
 
-            <div class="form-section">
-                <label for="publico">Público objetivo:</label>
-                <select id="publico" name="publico" placeholder="Público objetivo">
-                    <option value="estudiantes">Evento para estudiantes</option>
-                    <option value="profesores">Evento para profesores</option>
-                    <option value="comunidad">Evento para comunidad universitaria</option>
-                  </select>
-            </div>
-
-            <div class="form-section">
-                <label for="desc">Descripción del evento:</label>
-                <textarea id="desc" name="desc" rows="4" placeholder="Describe el evento..."></textarea>
-            </div>
-
-            <div class="form-section">
-                <label for="ubi">Ubicación del evento:</label>
-                <input type="text" id="ubi" name="ubi" placeholder="Dirección o ubicación">
-            </div>
-
+            <!-- Botón de envío -->
             <div class="form-section submit-section">
                 <input type="submit" value="Enviar">
             </div>
         </form>
     </div>
 
-    <!-- Checkbox para controlar la visibilidad del modal -->
-    <input type="checkbox" id="modal-checkbox" class="modal-checkbox" />
-
     <!-- Modal -->
+    <input type="checkbox" id="modal-checkbox" class="modal-checkbox">
     <div class="modal">
         <div class="modal-content">
             <h2>Sobre Nosotros</h2>
