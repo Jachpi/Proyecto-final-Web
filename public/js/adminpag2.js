@@ -17,30 +17,22 @@ const items = [
 ];
 const itemList = document.getElementById("lista");
 items.forEach(item => {
-    if (item.status === "pendiente") {
+    if (item.status !== "pendiente") {
     const listItem = document.createElement("li");
     const titulo = document.createElement("p");
     titulo.textContent = ` ${item.titulo}`;
     const fecha = document.createElement("p");
     fecha.textContent = ` ${item.fecha}`; 
-    // Crear botones
-    const approveButton = document.createElement("button");
-    approveButton.textContent = "Aprobar";
-    approveButton.addEventListener("click", () => {
-     item.status = "aprobado"; 
+    // Create delete button 
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Eliminar";
+    deleteButton.addEventListener("click", () => {
      itemList.removeChild(listItem); 
-    }); 
-    const rejectButton = document.createElement("button");
-    rejectButton.textContent = "Rechazar";
-    rejectButton.addEventListener("click", () => {
-     itemList.removeChild(listItem); 
-     items.push(item);
     }); 
      // Append paragraphs and delete button to list item 
     listItem.appendChild(titulo); 
     listItem.appendChild(fecha); 
-    listItem.appendChild(approveButton); 
-    listItem.appendChild(rejectButton); 
+    listItem.appendChild(deleteButton); 
     itemList.appendChild(listItem); 
 }
 });
