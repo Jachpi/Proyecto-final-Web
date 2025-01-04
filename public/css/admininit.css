@@ -122,19 +122,37 @@ body {
 
 ul{
 
+    
     margin: 3% 10%;
 }
 li{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
+    margin: 2% 0;
+    
     
 }
 li p{
     margin: 0 38% 0 0;
+    font-size: 16px;
+}
+li button{
+    padding: 5px;
+    background-color: salmon;
+    color: black;
+    border-radius: 5px;
+    font-size: 14px;
+    
+}
+li button:hover{
+    background-color: #a9ebff;
+    transition: 0.3s;
 }
 #addevent{
     margin: 5% 47%  ;
