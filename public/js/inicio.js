@@ -1,11 +1,4 @@
-/*TODO: Hay un bug que hace uno de estos dos casos:
-    a) tras cargar la página, reducir el mes no lo reduce
-    b) tras cargar la página, aumentar el mes 2 veces se salta el segundo.
-Ocurre en el día 2024, 11, 31.
-Sólo ocurre una vez y luego el bug desaparece
-Los bugs a) y b) son mutuamente excluyentes (si ocurre 1, el otro no transucrre)
 
-*/
 let eventList = document.getElementById("event-list")
 let leftButton = document.getElementById("move-left")
 let rightButton = document.getElementById("move-right")
@@ -16,7 +9,11 @@ const now = new Date();
 let fechaRelativa = new Date() // fecha que variará
 let monthLength //para 28, 29, 30 o 31 días
 
-//borra y modifica el grid
+/**
+ * Borra y modifica el calendario
+ * @param {boolean} hideWeekName - Oculta los días de la semana
+ */
+
 function clearGrid(hideWeekName = false){
     Array.from(eventList.children).forEach(child => {
         if (!child.classList.contains('weekName')) {
@@ -29,8 +26,12 @@ function clearGrid(hideWeekName = false){
     });
 }
 
-//Adición de los días del mes tras identificar el mes y el año
-function appendMonthDays(dayAmount, offset, currDay){
+/**
+ * Inserción de los días del mes
+ * @param {Int} dayAmount - cantidad de días (casillas) a insertar
+ * @param {Int} offset - desplaza todos los días x casillas para que el día 1 del mes comience en el día de la semana correcto
+ */
+function appendMonthDays(dayAmount, offset){
     clearGrid()
     const eventsForDisplay = getEvents(fechaRelativa, "month")
     eventsForDisplay.then(eventosObtenidos => {
@@ -63,10 +64,10 @@ function appendMonthDays(dayAmount, offset, currDay){
                     dia.appendChild(dayTxt) //se añade el contenido
                     if (now.getMonth() > fechaRelativa.getMonth()){
                         dia.className = "dia-mes-actual-pasado"
-                    }else if (now.getFullYear() == fechaRelativa.getFullYear() && now.getMonth() == fechaRelativa.getMonth() && currDay == i){
+                    }else if (now.getFullYear() == fechaRelativa.getFullYear() && now.getMonth() == fechaRelativa.getMonth() && now.getDate() == i){
                         dia.className = "dia-actual"
                     }else if (now.getMonth() == fechaRelativa.getMonth()){
-                        if (currDay < i){
+                        if (now.getDate() < i){
                             dia.className = "dia"
                         }else{
                             dia.className = "dia-mes-actual-pasado"
@@ -126,7 +127,9 @@ function appendMonthDays(dayAmount, offset, currDay){
     
 }
 
-//reducir día del mes en 1
+/**
+ * Reduce día del mes en 1
+ */
 function reduceMonth(){
     if (fechaRelativa.getMonth() == 0){
         fechaRelativa.setFullYear(fechaRelativa.getFullYear() - 1)
@@ -136,7 +139,9 @@ function reduceMonth(){
     }
 }
 
-//aumentar el día del mes en 1
+/**
+ * Aumenta día del mes en 1
+ */
 function increaseMonth(){
     if (fechaRelativa.getMonth() == 11){
         fechaRelativa.setFullYear(fechaRelativa.getFullYear() + 1)
@@ -146,7 +151,9 @@ function increaseMonth(){
     }
 }
 
-//Identificación y cálculo del mes que toca representar
+/**
+ * Identificación y cálculo del mes que toca representar
+ */
 function displayMonth(){
     document.getElementById("move-left").style.display = "block"
     document.getElementById("move-right").style.display = "block"
@@ -156,9 +163,14 @@ function displayMonth(){
     let diaOffset = new Date(fechaRelativa.getFullYear(), fechaRelativa.getMonth(), 1).getDay() + 5;
     
     const monthLength = checkMonthLength(fechaRelativa)
-    appendMonthDays(monthLength, diaOffset, now.getDate())
+    appendMonthDays(monthLength, diaOffset)
 }
 
+/**
+ * Evalúa el número de días del mes pasado en el parámetro de tipo Date
+ * @param {Date} specificDate - Fecha específica sobre la que se mirará cuántos días tiene su mes
+ * @returns - 28,29,30 o 31, según el mes
+ */
 function checkMonthLength(specificDate){
     if (specificDate.getMonth() == 1){
         //Feb >:(
@@ -187,7 +199,9 @@ function checkMonthLength(specificDate){
     }
 }
 
-//Inserción de los 7 días de la semana actual
+/**
+ * Inserción de los 7 días de la semana actual
+ */
 async function appendWeekDays(){
     clearGrid()
     const currDay = now.getDay()
@@ -309,7 +323,9 @@ async function appendWeekDays(){
     })
 }
 
-//Identificación de la semana actual
+/**
+ * Identificación de la semana actual
+ */
 function displayWeek(){
     document.getElementById("move-left").style.display = "none"
     document.getElementById("move-right").style.display = "none"
@@ -318,19 +334,25 @@ function displayWeek(){
     appendWeekDays()
 }
 
-//reducir el día en 1
+/**
+ * Reducir el día en 1
+ */
 function reduceDay(){
     fechaRelativa.setTime(fechaRelativa.getTime() - (24*60*60*1000));
     displayDay()
 }
 
-//aumentar el día en 1
+/**
+ * Aumentar el día en 1
+ */
 function increaseDay(){
     fechaRelativa.setTime(fechaRelativa.getTime() + (24*60*60*1000));
     displayDay()
 }
 
-//Representación del día actual
+/**
+ * Representación del día actual
+ */
 function displayDay(){
     clearGrid(true)
     document.getElementById("move-left").style.display = "block"
@@ -372,6 +394,7 @@ function displayDay(){
             let timeP = document.createElement("p")
             timeP.className = "eventText"
             timeP.innerHTML = "("+startHourMatch+'-'+endHourMatch+")"
+
             obj.addEventListener('click', (celda) => {
                 let clickedDay = celda.target
                 let diaType = clickedDay.className
@@ -385,7 +408,15 @@ function displayDay(){
                     }else{
                         clickedDay.className = "dia-clicked"
                     }
-                    setTimeout(()=>{clickedDay.className = diaType},200)
+                    setTimeout(() => {
+                        clickedDay.className = diaType
+                        postTo(
+                            '/evento.html',
+                            {
+                                idEvento : evento['IDEvento'],
+                            }
+                        )
+                    },250)
                 }
             })
             obj.appendChild(nameP)
@@ -396,8 +427,22 @@ function displayDay(){
     ).catch("Sucedió un error, inténtelo más tarde")
 }
 
+/**
+ * Redirige a otra página con información
+ * @param {String} url - dirección de la página
+ * @param {Object} data - información que se enviará
+ */
+function postTo(url, data){
+    const params = new URLSearchParams(data).toString()
+    window.location.href = `${url}?${params}`
+}
 
-//identificar el display actual del calendario antes de cambiar
+
+/**
+ * Función que se invoca 1 vez al inicio de la carga de la página
+ */
+function setup(){
+    //identificar el display actual del calendario antes de cambiar
 leftButton.addEventListener('click', () => {
     if (checkBoxes[0].checked){
         reduceDay()
@@ -441,8 +486,20 @@ checkBoxes[2].addEventListener('click', ()=>{
     eventList.style.rowGap = "2px"
 })
 
-displayMonth() //cargar el mes actual al inicio de la carga de la página
+document.getElementById('addevent').addEventListener('click', function (event) {
+    event.preventDefault();
+    window.location.href = '/eventoform.html';
+});
 
+displayMonth() //cargar el mes actual al inicio de la carga de la página
+}
+
+/**
+ * Solicita del controlador los eventos presentes en una fecha del año
+ * @param {*} date - Fecha de la que se quiere obtener los datos
+ * @param {*} type - Filtro para recoger todos los eventos del día ('day') o del mes ('month')
+ * @returns - todos los eventos que se encuentran en el intervalo especificado
+ */
 async function getEvents(date, type = "day"){
     try {
         const response = await fetch('evento/calendar/items', {
@@ -465,7 +522,5 @@ async function getEvents(date, type = "day"){
     }
 }
 
-document.getElementById('addevent').addEventListener('click', function (event) {
-    event.preventDefault();
-    window.location.href = '/eventoform.html';
-});
+
+setup()

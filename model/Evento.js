@@ -10,7 +10,7 @@ const Evento = {
   getCalendarEvents: (date, callback) => {
     const query = `
       SELECT * FROM Evento
-      WHERE FechaHora LIKE ?
+      WHERE FechaHora LIKE ? AND Estado != 'Pendiente'
       ORDER BY FechaHora ASC
     `;
     db.all(query, [`%${date}%`], (err, rows) => {
@@ -24,6 +24,25 @@ const Evento = {
       }
       return callback(null, rows);
     });
+  },
+
+  getIdEvent: (id, callback) => {
+    const query = `
+      SELECT * FROM Evento
+      WHERE IDEvento = ?
+    `;
+    db.get(query, id, (err, res) => {
+      if (err) {
+        console.error('Error en la consulta SQL:', err.message);
+        return callback(err, null);
+      }else if(res){
+        console.log(id, "--->",res)
+        return callback(null, res)
+      }else{
+        console.log(id, "--->",res)
+        return callback(null, null)
+      }
+    })
   },
 
   /**

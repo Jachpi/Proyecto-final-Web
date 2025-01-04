@@ -20,6 +20,16 @@ exports.events = (req, res) => {
   });
 };
 
+exports.getIdEvent = (req, res) => {
+  const {id} = req.body;
+  Event.getIdEvent(id, (err, evento) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    return res.status(200).json(evento);
+  })
+}
+
 exports.createEvent = (req, res) => {
   console.log('req.body:', req.body);
   console.log('Sesión en createEvent:', req.session);
