@@ -122,7 +122,7 @@ body {
 
 ul{
 
-    margin: 3% 18%;
+    margin: 3% 10%;
 }
 li{
     display: flex;
@@ -134,7 +134,7 @@ li{
     
 }
 li p{
-    margin: 0 37% 0 0;
+    margin: 0 38% 0 0;
 }
 #addevent{
     margin: 5% 47%  ;

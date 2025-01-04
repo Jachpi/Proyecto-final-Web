@@ -2,13 +2,17 @@ let pagebutton1 = document.getElementById("pendientes")
 let pagebutton2 = document.getElementById("aprobados")
 
 pagebutton1.addEventListener('click', ()=>{
-    window.location.href = "http://127.0.0.1:5500/public/inicioadmin.html";
+    window.location.href = "/inicioadmin.html";
 
 })
 pagebutton2.addEventListener('click', ()=>{
-    window.location.href = "http://127.0.0.1:5500/public/adminpag2.html";
+    window.location.href = "/adminpag2.html";
     
 })
+document.getElementById('addevent').addEventListener('click', function (event) {
+    event.preventDefault();
+    window.location.href = '/eventoform.html';
+});
 
 const items = [ 
     { titulo: "Item 1", fecha: 100, status: "aprobado" },
