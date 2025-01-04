@@ -8,6 +8,7 @@ const fetch = require('node-fetch');
 
 // Rutas para eventos
 router.post('/calendar/items', eventController.events)
+router.post('/idEvent', eventController.getIdEvent)
 router.post('/create', upload.none(), eventController.createEvent) // Solo usuarios autenticados pueden crear eventos
 router.post('/upload-image', upload.single('imagen'), async (req, res) => {
   try {
