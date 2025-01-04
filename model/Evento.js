@@ -28,18 +28,15 @@ const Evento = {
 
   getIdEvent: (id, callback) => {
     const query = `
-      SELECT * FROM Evento
-      WHERE IDEvento = ?
+      SELECT Nombre, Descripcion, Imagen, FechaHora, FechaHoraFin, Username, Categoria, Estado FROM Evento JOIN Usuarios WHERE IDEvento = ?
     `;
     db.get(query, id, (err, res) => {
       if (err) {
         console.error('Error en la consulta SQL:', err.message);
         return callback(err, null);
       }else if(res){
-        console.log(id, "--->",res)
         return callback(null, res)
       }else{
-        console.log(id, "--->",res)
         return callback(null, null)
       }
     })

@@ -4,8 +4,8 @@ const output = document.getElementById('output');
 const titulo = document.getElementsByTagName("h1")
 
 
-    params.forEach(async (value, key) => {
-        console.log(`${key}: ${value}`)
+    params.forEach(async (id, key) => {
+        console.log(`${key}: ${id}`)
         if (key == 'idEvento'){
             try{
                 const response = await fetch('evento/idEvent', {
@@ -13,7 +13,7 @@ const titulo = document.getElementsByTagName("h1")
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body:JSON.stringify({value}),
+                    body:JSON.stringify({id}),
                 });
     
                 const data = await response.json()
