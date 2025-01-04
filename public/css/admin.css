@@ -119,23 +119,11 @@ body {
 .pagination * {
     margin: 2px;
 }
-.list{
-    margin-top: 3%;
-    margin-left: 18%;
-    margin-right: 18%;
 
+ul{
+
+    margin: 3% 10%;
 }
-.event{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    
-    
-}
- 
 
 li{
     display: flex;
@@ -147,7 +135,7 @@ li{
     
 }
 li p{
-    margin: 0 40% 0 0;
+    margin: 0 42% 0 0;
 }
 #addevent{
     margin: 5% 47%  ;
