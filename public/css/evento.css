@@ -98,6 +98,7 @@ header {
 
 .fecha-hora {
     display: flex;
+    flex-direction: column;
     gap: 10px; /* Espacio entre fecha y hora */
 }
 
@@ -112,6 +113,8 @@ header {
     width: 400px;
     object-fit: fill;
     border-top-left-radius: 10px;
+    justify-self: center;
+    border-bottom-right-radius: 10px;
 }
 .titulo{
     grid-column: 2/4;

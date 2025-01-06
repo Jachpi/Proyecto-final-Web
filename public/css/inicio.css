@@ -94,6 +94,7 @@ body {
     transition: background-color 0.3s, border-color 0.3s;
     user-select: none;
     text-align: center;
+    justify-self: center;
 }
 
 input[type="radio"]:checked + .checkbox-label {

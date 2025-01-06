@@ -28,7 +28,7 @@ const Evento = {
 
   getIdEvent: (id, callback) => {
     const query = `
-      SELECT Nombre, Descripcion, Imagen, FechaHora, FechaHoraFin, Username, Categoria, Estado FROM Evento JOIN Usuarios WHERE IDEvento = ?
+      SELECT Nombre, Descripcion, Imagen, FechaHora, FechaHoraFin, Username, Categoria, Ubicacion ,Estado FROM Evento JOIN Usuarios WHERE IDEvento = ?
     `;
     db.get(query, id, (err, res) => {
       if (err) {
@@ -40,6 +40,25 @@ const Evento = {
         return callback(null, null)
       }
     })
+  },
+
+  getEventByName: (name, callback) => {
+    const query = `
+    SELECT * FROM Evento
+    WHERE Nombre COLLATE utf8mb4_general_ci LIKE ? AND Estado != 'Pendiente'
+    ORDER BY FechaHora ASC
+  `;
+  db.all(query, [`%${name}%`], (err, rows) => {
+    if (err) {
+      console.error('Error en la consulta SQL:', err.message);
+      return callback(err, null);
+    }
+    // 'rows' será un array (vacío si no hay resultados)
+    if (!rows) {
+      return callback(null, []);
+    }
+    return callback(null, rows);
+  });
   },
 
   /**

@@ -3,6 +3,7 @@ let eventList = document.getElementById("event-list")
 let leftButton = document.getElementById("move-left")
 let rightButton = document.getElementById("move-right")
 let checkBoxes = document.getElementsByClassName("radio")
+const search = document.getElementById("search")
 
 
 const now = new Date();
@@ -358,6 +359,9 @@ function displayDay(){
     document.getElementById("move-left").style.display = "block"
     document.getElementById("move-right").style.display = "block"
 
+    eventList.style.gridTemplateRows = "5% 80%"
+    eventList.style.gridTemplateColumns = "1fr 2fr 1fr"
+
     let dateTextDisplay = document.getElementById("date-text-display")
     dateTextDisplay.innerHTML = fechaRelativa.getDate() + " / " + new Intl.DateTimeFormat('es-ES',{month: 'long'}).format(fechaRelativa) + " / " + fechaRelativa.getFullYear() //para pasar el mes de hoy a español
 
@@ -426,6 +430,86 @@ function displayDay(){
     }
     ).catch("Sucedió un error, inténtelo más tarde")
 }
+/**
+ * Modifica el calendario para mostrar eventos que coinciden con la información insertada en la barra de búsqueda
+ */
+function displayCustom(name){
+    clearGrid(true)
+    document.getElementById("move-left").style.display = "none"
+    document.getElementById("move-right").style.display = "none"
+
+    eventList.style.gridTemplateRows = "5% 80%"
+    eventList.style.gridTemplateColumns = "1fr 2fr 1fr"
+
+    let dateTextDisplay = document.getElementById("date-text-display")
+    dateTextDisplay.innerHTML = ""
+    let dia = document.createElement("div")
+    dia.className = "unique-dia"
+    dia.style.gridColumn = 2
+    dia.style.rowGap = '0.5em'
+    dia.style.height = "80vh"
+    dia.style.overflow = "visible"
+    eventList.appendChild(dia)
+
+    getEventsByName(name).then(listaEventos => {
+        console.log(listaEventos)
+        listaEventos.forEach((evento) =>{
+            let obj = document.createElement("div")
+            const startHourMatch = evento['FechaHora'].match(/\d+:\d+/gm)[0]
+            const endHourMatch = evento['FechaHoraFin'].match(/\d+:\d+/gm)[0]
+            const [h1, m1] = startHourMatch.split(':').map(Number);
+            const fechaInicio = new Date(fechaRelativa.getFullYear(),fechaRelativa.getMonth(),fechaRelativa.getDate(),h1,m1,0);
+            const [h2, m2] = endHourMatch.split(':').map(Number);
+            const fechaFin = new Date(fechaRelativa.getFullYear(),fechaRelativa.getMonth(),fechaRelativa.getDate(),h2,m2,0);
+            if (fechaInicio < now){
+                if (fechaFin > now){
+                    obj.className = "dia-actual"
+                }else{
+                    obj.className = "dia-mes-actual-pasado"
+                }
+            }else{
+                obj.className = "dia"
+            }
+                        
+            let nameP = document.createElement("p")
+            nameP.className = "eventText"
+            nameP.innerHTML = evento["Nombre"]
+            let timeP = document.createElement("p")
+            timeP.className = "eventText"
+            timeP.innerHTML = "("+startHourMatch+'-'+endHourMatch+")"
+
+            obj.addEventListener('click', (celda) => {
+                let clickedDay = celda.target
+                let diaType = clickedDay.className
+                if (clickedDay.tagName != "DIV"){ // Previene que la animación aplique a sus hijos (que son todos <p> en este caso)
+                    clickedDay = clickedDay.parentElement
+                    diaType = clickedDay.className
+                }
+                if(clickedDay.className != "dia-clicked"){ //evitar que vuelvan a clicar durante la animación
+                    if(clickedDay.className == "dia-actual"){ //el día actual necesita una animación ligeramente distinta debido a que el grosor adicional de su borde daba problemas con la animación normal
+                        clickedDay.className = "dia-actual-clicked"
+                    }else{
+                        clickedDay.className = "dia-clicked"
+                    }
+                    setTimeout(() => {
+                        clickedDay.className = diaType
+                        postTo(
+                            '/evento.html',
+                            {
+                                idEvento : evento['IDEvento'],
+                            }
+                        )
+                    },250)
+                }
+            })
+            obj.appendChild(nameP)
+            obj.appendChild(timeP)
+            dia.appendChild(obj)
+        })
+    }
+    ).catch("Sucedió un error, inténtelo más tarde")
+
+}
 
 /**
  * Redirige a otra página con información
@@ -466,8 +550,6 @@ rightButton.addEventListener('click', () => {
 checkBoxes[0].addEventListener('click', ()=>{
     fechaRelativa.setTime(now.getTime())
     displayDay()
-    eventList.style.gridTemplateRows = "5% 80%"
-    eventList.style.gridTemplateColumns = "1fr 2fr 1fr"
 })
 
 checkBoxes[1].addEventListener('click', ()=>{
@@ -490,6 +572,17 @@ document.getElementById('addevent').addEventListener('click', function (event) {
     event.preventDefault();
     window.location.href = '/eventoform.html';
 });
+
+
+search.addEventListener('keydown', event => {
+    if (event.key === 'Enter'){
+        checkBoxes[0].checked = false
+        checkBoxes[1].checked = false
+        checkBoxes[2].checked = false
+        displayCustom(search.value)
+    }
+    
+})
 
 displayMonth() //cargar el mes actual al inicio de la carga de la página
 }
@@ -522,5 +615,29 @@ async function getEvents(date, type = "day"){
     }
 }
 
+async function getEventsByName(name){
+    try {
+        const response = await fetch('evento/calendar/nameEvent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({name}),
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+            return data;
+        } else {
+            throw new Error(`Error durante la obtención de eventos: ${response}`)
+        }
+    } catch (error) {
+        throw new Error(`Error grave durante la obtención de eventos: ${error}`)
+    }
+}
+
 
 setup()
+
+

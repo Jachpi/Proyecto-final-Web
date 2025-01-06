@@ -30,6 +30,17 @@ exports.getIdEvent = (req, res) => {
   })
 }
 
+exports.getEventByName = (req, res) => {
+  const {name} = req.body;
+  console.log("Searching events with name:",name)
+  Event.getEventByName(name, (err, events) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    return res.status(200).json(events);
+  })
+}
+
 exports.createEvent = (req, res) => {
   console.log('req.body:', req.body);
   console.log('Sesión en createEvent:', req.session);
