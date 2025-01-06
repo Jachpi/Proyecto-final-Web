@@ -8,23 +8,40 @@ const Evento = {
    * @param {function} callback - Función que maneja el resultado (err, rows).
    */
   getCalendarEvents: (date, callback) => {
-    const query = `
-      SELECT * FROM Evento
-      WHERE FechaHora LIKE ? AND Estado != 'Pendiente'
-      ORDER BY FechaHora ASC
+    // Primero actualizamos el estado de los eventos pasados
+    const updateQuery = `
+      UPDATE Evento
+      SET Estado = 'Terminado'
+      WHERE FechaHora < datetime('now') AND Estado != 'Terminado'
     `;
-    db.all(query, [`%${date}%`], (err, rows) => {
-      if (err) {
-        console.error('Error en la consulta SQL:', err.message);
-        return callback(err, null);
+  
+    db.run(updateQuery, [], (updateErr) => {
+      if (updateErr) {
+        console.error('Error al actualizar estados de eventos:', updateErr.message);
+        return callback(updateErr, null);
       }
-      // 'rows' será un array (vacío si no hay resultados)
-      if (!rows) {
-        return callback(null, []);
-      }
-      return callback(null, rows);
+  
+      // Luego obtenemos los eventos según el filtro de fecha
+      const selectQuery = `
+        SELECT * FROM Evento
+        WHERE FechaHora LIKE ? AND Estado != 'Pendiente'
+        ORDER BY FechaHora ASC
+      `;
+      db.all(selectQuery, [`%${date}%`], (err, rows) => {
+        if (err) {
+          console.error('Error en la consulta SQL:', err.message);
+          return callback(err, null);
+        }
+  
+        // 'rows' será un array (vacío si no hay resultados)
+        if (!rows) {
+          return callback(null, []);
+        }
+        return callback(null, rows);
+      });
     });
   },
+  
 
   getIdEvent: (id, callback) => {
     const query = `
