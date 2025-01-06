@@ -8,23 +8,42 @@ const Evento = {
    * @param {function} callback - Función que maneja el resultado (err, rows).
    */
   getCalendarEvents: (date, callback) => {
-    const query = `
-      SELECT * FROM Evento
-      WHERE FechaHora LIKE ? AND Estado != 'Pendiente'
-      ORDER BY FechaHora ASC
+    // Primero actualizamos el estado de los eventos pasados
+    // Como estamos usando SQLite y no se pueden hacer triggers de tiempo, lo hacemos cada vez que un usuario acceda a la lista de eventos
+    // En caso de usar MySQL o PostgreSQL, se puede hacer un trigger que actualice el estado automáticamente y que consume mucha menos memoria
+    const updateQuery = `
+      UPDATE Evento
+      SET Estado = 'Terminado'
+      WHERE FechaHora < datetime('now') AND Estado != 'Terminado'
     `;
-    db.all(query, [`%${date}%`], (err, rows) => {
-      if (err) {
-        console.error('Error en la consulta SQL:', err.message);
-        return callback(err, null);
+  
+    db.run(updateQuery, [], (updateErr) => {
+      if (updateErr) {
+        console.error('Error al actualizar estados de eventos:', updateErr.message);
+        return callback(updateErr, null);
       }
-      // 'rows' será un array (vacío si no hay resultados)
-      if (!rows) {
-        return callback(null, []);
-      }
-      return callback(null, rows);
+  
+      // Luego obtenemos los eventos según el filtro de fecha
+      const selectQuery = `
+        SELECT * FROM Evento
+        WHERE FechaHora LIKE ? AND Estado != 'Pendiente'
+        ORDER BY FechaHora ASC
+      `;
+      db.all(selectQuery, [`%${date}%`], (err, rows) => {
+        if (err) {
+          console.error('Error en la consulta SQL:', err.message);
+          return callback(err, null);
+        }
+  
+        // 'rows' será un array (vacío si no hay resultados)
+        if (!rows) {
+          return callback(null, []);
+        }
+        return callback(null, rows);
+      });
     });
   },
+  
 
   getIdEvent: (id, callback) => {
     const query = `
@@ -94,7 +113,40 @@ const Evento = {
       console.log('Evento creado con ID:', this.lastID);
       return callback(null);
     });
+  },
+  getEventosPendientes: (callback) => {
+    const query = `
+      SELECT * FROM Evento WHERE Estado = 'Pendiente' ORDER BY FechaHora ASC`;
+
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        console.error('Error en la consulta SQL:', err.message);
+        return callback(err, null);
+      }
+
+      if (!rows) {
+        return callback(null, []);
+      }
+      return callback(null, rows);
+    });
+  },
+  getEventosAprobados: (callback) => {
+    const query = `
+      SELECT * FROM Evento WHERE Estado = 'Aprobado' ORDER BY FechaHora ASC`;
+
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        console.error('Error en la consulta SQL:', err.message);
+        return callback(err, null);
+      }
+
+      if (!rows) {
+        return callback(null, []);
+      }
+      return callback(null, rows);
+    });
   }
+
 };
 
 module.exports = Evento;

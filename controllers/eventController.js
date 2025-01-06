@@ -91,4 +91,23 @@ exports.createEvent = (req, res) => {
     }
     return res.status(201).json({ success: true, message: 'Evento creado exitosamente' });
   });
+  
+};
+
+exports.getEventos = (req, res) => {
+  Event.getEventosPendientes((err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    return res.status(200).json(rows);
+  });
+};
+
+exports.getEventosAprobados = (req, res) => {
+  Event.getEventosAprobados((err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    return res.status(200).json(rows);
+  });
 };
