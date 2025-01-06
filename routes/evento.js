@@ -11,8 +11,6 @@ router.post('/calendar/items', eventController.events)
 router.post('/idEvent', eventController.getIdEvent)
 router.post('/calendar/nameEvent', eventController.getEventByName)
 router.post('/create', upload.none(), eventController.createEvent) // Solo usuarios autenticados pueden crear eventos
-router.get('/eventospendientes', eventController.getEventos)
-router.get('/eventosaprobados', eventController.getEventosAprobados)
 router.post('/upload-image', upload.single('imagen'), async (req, res) => {
   try {
     const fileBuffer = req.file.buffer; // el archivo en memoria

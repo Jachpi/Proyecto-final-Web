@@ -10,13 +10,11 @@ pagebutton2.addEventListener('click', ()=>{
     window.location.href = "/adminpag2.html";
  
 })
- 
-
- 
-  async function getEventos() {
+async function getEventos() {
      try {
-         const response = await fetch(`evento/eventospendientes`, {
+         const response = await fetch(`admin/eventospendientes`, {
           method: 'GET', 
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
         },

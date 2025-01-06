@@ -15,8 +15,9 @@ document.getElementById('addevent').addEventListener('click', function (event) {
 });
 async function getEventos() {
     try {
-        const response = await fetch(`evento/eventosaprobados`, {
+        const response = await fetch(`admin/eventosaprobados`, {
          method: 'GET', 
+         credentials: 'include',
          headers: {
            'Content-Type': 'application/json'
        },

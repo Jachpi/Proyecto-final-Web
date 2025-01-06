@@ -32,42 +32,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Manejar el envío del formulario de login
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-
-        // Ocultar mensajes de error anteriores
+    
         loginError.style.display = 'none';
-
-        // Obtener los datos del formulario
+    
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
-
+    
         try {
             const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-                credentials: 'include'
+                credentials: 'include', // Incluye las cookies en la solicitud
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
-                // Si el login es exitoso y el usuario está aprobado
                 if (data.success && data.redirect) {
+                    // Redirige a la URL proporcionada por el backend
                     window.location.href = data.redirect;
                 }
             } else {
-                // Mostrar mensaje de error
-                if (data.error === 'Credenciales inválidas') {
-                    loginError.textContent = 'El correo o la contraseña son incorrectos.';
-                } else if (data.error === 'Usuario no aprobado') {
-                    loginError.textContent = 'Tu cuenta aún no ha sido aprobada.';
-                } else if (data.error === 'Datos inválidos') {
-                    loginError.textContent = 'Por favor, completa todos los campos.';
-                } else {
-                    loginError.textContent = 'Ocurrió un error durante el login.';
-                }
+                // Manejar errores según la respuesta del backend
+                loginError.textContent = data.error || 'Error desconocido durante el login.';
                 loginError.style.display = 'block';
             }
         } catch (error) {
@@ -75,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loginError.textContent = 'Ocurrió un error en el servidor.';
             loginError.style.display = 'block';
         }
-    });
+});
 
     // Manejar el envío del formulario de signup
     signupForm.addEventListener('submit', async (e) => {

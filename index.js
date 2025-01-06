@@ -5,6 +5,7 @@ const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const eventoRoutes = require('./routes/evento');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
 app.use('/evento', eventoRoutes);
+app.use('/admin', adminRoutes);
 
 app.use(express.static(path.join(__dirname, 'public')));
 

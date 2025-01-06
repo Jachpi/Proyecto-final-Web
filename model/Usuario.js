@@ -6,7 +6,7 @@ const User = {
   findByEmailAndPassword: (email, password, callback) => {
     console.log('Consulta SQL (login):', email); 
     db.get(
-      'SELECT IDUsuario, Email, Username, isApproved, Password FROM Usuarios WHERE Email = ?',
+      'SELECT IDUsuario, Email, Username, isApproved, Rol, Password FROM Usuarios WHERE Email = ?',
       [email],
       (err, row) => {
         if (err) {
@@ -32,7 +32,8 @@ const User = {
             IDUsuario: row.IDUsuario,
             Email: row.Email,
             Username: row.Username,
-            isApproved: row.isApproved
+            isApproved: row.isApproved,
+            Rol : row.Rol
           };
           callback(null, user);
         });

@@ -1,33 +1,40 @@
 const User = require('../model/Usuario');
 
 exports.login = (req, res) => {
-  const { email, password } = req.body; 
-
-  console.log('Datos recibidos en /login:', email, password); 
+  const { email, password } = req.body;
 
   User.findByEmailAndPassword(email, password, (err, user) => {
     if (err) {
-      console.error('Error en la consulta SQL:', err.message); 
+      console.error('Error en la consulta SQL:', err.message);
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
 
     if (!user) {
-      console.log('Credenciales inválidas'); // Log si no se encuentra el usuario
-      return res.status(401).json({ error: 'Credenciales inválidas' }); // Respuesta JSON
+      return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
     // Guardar datos en la sesión
-    req.session.userId = user.IDUsuario; // Usar 'IDUsuario'
-    req.session.email = user.Email; // Usar 'Email'
-    req.session.isApproved = user.isApproved; // 'isApproved' es correcto
+    req.session.userId = user.IDUsuario;
+    req.session.email = user.Email;
+    req.session.isApproved = user.isApproved;
+    req.session.rol = user.Rol; // Agregar el rol del usuario
 
-    console.log('Login exitoso para:', user);
-    if (user.isApproved) {
-      return res.status(200).json({ success: true, redirect: '/inicio.html' });
+    console.log('Inicio de sesión exitoso para:', user);
+
+    if (!user.isApproved) {
+      return res.status(403).json({ error: 'Usuario no aprobado' });
     }
-    return res.status(403).json({ error: 'Usuario no aprobado' });
+
+    // Redirigir según el rol del usuario
+    if (user.Rol === 'Admin') {
+      return res.status(200).json({ success: true, redirect: '/inicioadmin.html' });
+    }
+
+    // Redirigir para otros roles (por ejemplo, usuarios normales)
+    return res.status(200).json({ success: true, redirect: '/inicio.html' });
   });
 };
+
 
 exports.signup = (req, res) => {
   const {
