@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Evento</title>
-    <link rel="stylesheet" href="css/eventof.css">
+    <link rel="stylesheet" href="/css/eventof.css">
 </head>
 <body>
     <div class="topnav">
@@ -21,13 +21,13 @@
             <h1>Organiza tu Evento</h1>
         </header>
 
-        <form id="event-form" class="event-form" method="POST" enctype="multipart/form-data" action="/evento/create">
+        <form id="event-form" class="event-form" method="POST" enctype="multipart/form-data">
             <!-- Imagen -->
             <div class="form-section image-section">
                 <label for="image-upload" class="image-label">
                     <img src="./img/placeholder.jpg" id="image-preview" alt="Evento Placeholder">
                 </label>
-                <input type="file" id="image-upload" accept="image/*" required>
+                <input type="file" id="image-upload" accept="image/*">
             </div>
 
             <!-- Nombre del evento -->
@@ -64,6 +64,12 @@
                 </select>
             </div>
 
+            <!-- Lugar -->
+            <div class="form-section">
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion" name="ubicacion" placeholder="Ubicación del evento" required>
+            </div>
+
             <!-- Botón de envío -->
             <div class="form-section submit-section">
                 <input type="submit" value="Enviar">
@@ -86,6 +92,6 @@
         <p>Calle Tajo, s/n, 28670 Villaviciosa de Odón, Madrid</p>
     </footer>
 
-    <script src="js/eventoform.js"></script>
+    <script src="/js/eventoform.js"></script>
 </body>
 </html>

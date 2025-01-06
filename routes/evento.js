@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const eventController = require('../controllers/eventController');
+const Event = require('../model/Evento');
 const multer = require('multer');
 const upload = multer(); // sin opciones -> memoria / none
+const path = require('path');
 const fetch = require('node-fetch');
 
 
@@ -11,6 +13,24 @@ router.post('/calendar/items', eventController.events)
 router.post('/idEvent', eventController.getIdEvent)
 router.post('/calendar/nameEvent', eventController.getEventByName)
 router.post('/create', upload.none(), eventController.createEvent) // Solo usuarios autenticados pueden crear eventos
+router.get('/editar/:id', (req, res) => {
+  const { id } = req.params;
+  res.sendFile(path.join(__dirname, '../public/eventoform.html'));
+});
+router.post('/edit', eventController.editEvent);
+router.get('/get/:id', (req, res) => {
+  const eventId = req.params.id;
+
+  Event.getIdEvent(eventId, (err, evento) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    if (!evento) {
+      return res.status(404).json({ error: 'Evento no encontrado' });
+    }
+    return res.status(200).json(evento);
+  });
+});
 router.post('/upload-image', upload.single('imagen'), async (req, res) => {
   try {
     const fileBuffer = req.file.buffer; // el archivo en memoria

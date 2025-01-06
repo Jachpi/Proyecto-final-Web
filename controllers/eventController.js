@@ -56,7 +56,8 @@ exports.createEvent = (req, res) => {
     imagen, 
     fechaHora,      // p. ej. "2025-01-01 22:00:00"
     fechaHoraFin, 
-    categoria 
+    categoria,
+    ubicacion 
   } = req.body;
 
   const userId = req.session.userId;
@@ -82,6 +83,7 @@ exports.createEvent = (req, res) => {
     idOwner: userId,
     categoria,
     estado: 'Pendiente',
+    ubicacion,
   };
 
   Event.crearEvento(nuevoEvento, (err) => {
@@ -93,4 +95,42 @@ exports.createEvent = (req, res) => {
   });
   
 };
+
+exports.editEvent = (req, res) => {
+  const { idEvento, nombre, descripcion, imagen, fechaHora, fechaHoraFin, categoria, ubicacion } = req.body;
+
+  if (!req.session?.userId) {
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
+
+  console.log('Datos recibidos en editEvent:', req.body); // Log de depuración
+
+  const userId = req.session.userId;
+
+  // Verificar si el usuario es propietario del evento
+  Event.isOwner(idEvento, userId, (err, isOwner) => {
+    if (err) {
+      console.error('Error al verificar propietario del evento:', err); // Log del error
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+
+    if (!isOwner) {
+      return res.status(403).json({ error: 'No tienes permiso para editar este evento.' });
+    }
+
+    // Actualizar el evento
+    const updatedEvent = { nombre, descripcion, imagen, fechaHora, fechaHoraFin, categoria, ubicacion };
+    console.log('Actualizando evento:', updatedEvent); // Log de depuración
+
+    Event.updateEvent(idEvento, updatedEvent, (err) => {
+      if (err) {
+        console.error('Error al actualizar el evento:', err.message); // Log del error
+        return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+      return res.status(200).json({ success: true, message: 'Evento actualizado exitosamente.' });
+    });
+  });
+};
+
+
 

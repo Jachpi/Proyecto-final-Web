@@ -88,7 +88,7 @@ const Evento = {
     // Consulta de INSERT con todas las columnas que quieres rellenar manualmente
     const query = `
       INSERT INTO Evento
-      (Nombre, Descripcion, Imagen, FechaHora, FechaHoraFin, IDOwner, Categoria, Estado)
+      (Nombre, Descripcion, Imagen, FechaHora, FechaHoraFin, IDOwner, Categoria, Estado, Ubicacion)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
@@ -101,7 +101,8 @@ const Evento = {
       evento.fechaHoraFin,
       evento.idOwner,
       evento.categoria,
-      evento.estado
+      evento.estado,
+      evento.ubicacion
     ];
 
     db.run(query, params, function (err) {
@@ -113,7 +114,54 @@ const Evento = {
       console.log('Evento creado con ID:', this.lastID);
       return callback(null);
     });
+  },
+  isOwner: (idEvento, userId, callback) => {
+    db.get(
+      'SELECT Rol FROM Usuarios WHERE IDUsuario = ?',
+      [userId],
+      (err, user) => {
+        if (err) {
+          console.error('Error en la consulta SQL de isOwner (verificar rol):', err.message);
+          return callback(err, null);
+        }
+  
+        // Si el usuario es Admin, devolver true directamente
+        if (user && user.Rol === 'Admin') {
+          return callback(null, true);
+        }
+  
+        // Si no es Admin, verificar si es dueño del evento
+        db.get(
+          'SELECT 1 FROM Evento WHERE idEvento = ? AND idOwner = ?',
+          [idEvento, userId],
+          (err, row) => {
+            if (err) {
+              console.error('Error en la consulta SQL de isOwner (verificar propietario):', err.message);
+              return callback(err, null);
+            }
+            callback(null, !!row); // Devuelve true si el evento pertenece al usuario
+          }
+        );
+      }
+    );
+  },  
+  updateEvent: (idEvento, updatedEvent, callback) => {
+    const { nombre, descripcion, imagen, fechaHora, fechaHoraFin, categoria, ubicacion } = updatedEvent;
+  
+    db.run(
+      'UPDATE Evento SET nombre = ?, descripcion = ?, imagen = ?, fechaHora = ?, fechaHoraFin = ?, categoria = ?, ubicacion = ? WHERE idEvento = ?',
+      [nombre, descripcion, imagen, fechaHora, fechaHoraFin, categoria, ubicacion, idEvento],
+      function (err) {
+        if (err) {
+          console.error('Error en la consulta SQL de updateEvent:', err.message); // Log del error
+          return callback(err);
+        }
+        console.log('Evento actualizado, cambios:', this.changes); // Verifica cuántas filas se actualizaron
+        callback(null);
+      }
+    );
   }
+  
 
 };
 
