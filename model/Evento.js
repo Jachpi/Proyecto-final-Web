@@ -9,6 +9,8 @@ const Evento = {
    */
   getCalendarEvents: (date, callback) => {
     // Primero actualizamos el estado de los eventos pasados
+    // Como estamos usando SQLite y no se pueden hacer triggers de tiempo, lo hacemos cada vez que un usuario acceda a la lista de eventos
+    // En caso de usar MySQL o PostgreSQL, se puede hacer un trigger que actualice el estado automáticamente y que consume mucha menos memoria
     const updateQuery = `
       UPDATE Evento
       SET Estado = 'Terminado'
