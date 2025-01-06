@@ -10,7 +10,7 @@ const fetch = require('node-fetch');
 router.post('/calendar/items', eventController.events)
 router.post('/idEvent', eventController.getIdEvent)
 router.post('/create', upload.none(), eventController.createEvent) // Solo usuarios autenticados pueden crear eventos
-router.post('/eventos/pendientes', eventController.getEventos)
+router.get('/eventospendientes', eventController.getEventos)
 router.post('/upload-image', upload.single('imagen'), async (req, res) => {
   try {
     const fileBuffer = req.file.buffer; // el archivo en memoria

@@ -1,4 +1,4 @@
-const params = new URLSearchParams(window.location.search);
+
 let pagebutton1 = document.getElementById("pendientes")
 let pagebutton2 = document.getElementById("aprobados")
 
@@ -11,15 +11,36 @@ pagebutton2.addEventListener('click', ()=>{
     
 })
 
+ 
+fetch('evento/eventospendientes') 
+    .then(response => { 
+         
+        if (!response.ok) { 
+            throw new Error('Network response was not ok');
+
+         }
+         return response.json(); 
+         }) 
+         .then(data => { // Handle the data (an array of rows from the table) 
+            console.log('Fetched rows:', data);  
+            }) .catch(error => { // Handle any errors that occurred during the fetch 
+            console.error('There was a problem with the fetch operation:', error);
+            });
+            
+/*
   async function getEventos() {
      try {
-         const response = await fetch(`/eventospendientes`, {
+         const response = await fetch(`evento/eventospendientes`, {
           method: 'POST', 
           headers: {
-             'Content-Type': 'application/json' } 
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(),
+          
             });
      const data = await response.json();
      if (response.ok) {
+        console.log("algo se ha encontrado");
         mostrarLista(data); 
         }
           else {
@@ -59,9 +80,12 @@ pagebutton2.addEventListener('click', ()=>{
                 lista.appendChild(eventolista); 
                });
             }
-       document.addEventListener('DOMContentLoaded', getEventos);
-               
+       //document.addEventListener('DOMContentLoaded', getEventos);
+getEventos();
+*/
+           
 
+       
 /*
 const itemList = document.getElementById("lista");
 items.forEach(item => {

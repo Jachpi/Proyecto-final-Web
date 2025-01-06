@@ -98,14 +98,15 @@ const Evento = {
   getEventosPendientes: (callback) => {
     const query = `
       SELECT * FROM Evento WHERE Estado = 'Pendiente' ORDER BY FechaHora ASC`;
-    db.all(query, [], (err, rows) => {
+
+    db.get(query, (err, rows) => {
       if (err) {
         console.error('Error en la consulta SQL:', err.message);
         return callback(err, null);
       }
 
       if (!rows) {
-        return callback(null, []);
+        return callback(null, null);
       }
       return callback(null, rows);
     });

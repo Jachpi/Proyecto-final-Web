@@ -84,10 +84,10 @@ exports.createEvent = (req, res) => {
 };
 
 exports.getEventos = (req, res) => {
-  Event.getEventosPendientes((err, events) => {
+  Event.getEventosPendientes((err, rows) => {
     if (err) {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
-    return res.status(200).json(events);
+    return res.status(200).json(rows);
   });
 };
