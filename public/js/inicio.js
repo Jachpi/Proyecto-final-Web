@@ -454,7 +454,7 @@ function displayCustom(name){
     getEventsByName(name).then(listaEventos => {
         listaEventos.forEach((evento) =>{
             let obj = document.createElement("div")
-            const startHourMatch = evento['FechaHora'].match(/\d+:\d+/gm)[0]
+            const startHourMatch = evento['FechaHora'].match(/\d+-\d+-\d+ \d+:\d+/gm)[0]
             const endHourMatch = evento['FechaHoraFin'].match(/\d+:\d+/gm)[0]
             const [h1, m1] = startHourMatch.split(':').map(Number);
             const fechaInicio = new Date(fechaRelativa.getFullYear(),fechaRelativa.getMonth(),fechaRelativa.getDate(),h1,m1,0);
