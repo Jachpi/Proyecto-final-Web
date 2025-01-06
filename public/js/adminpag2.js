@@ -13,30 +13,54 @@ document.getElementById('addevent').addEventListener('click', function (event) {
     event.preventDefault();
     window.location.href = '/eventoform.html';
 });
+async function getEventos() {
+    try {
+        const response = await fetch(`evento/eventosaprobados`, {
+         method: 'GET', 
+         headers: {
+           'Content-Type': 'application/json'
+       },
+       body:JSON.stringify(),
 
-const items = [ 
-    { titulo: "Item 1", fecha: 100, status: "aprobado" },
-    { titulo: "Item 2", fecha: 200, status: "pendiente" }, 
-    { titulo: "Item 3", fecha: 300, status: "aprobado" } 
-];
-const itemList = document.getElementById("lista");
-items.forEach(item => {
-    if (item.status !== "pendiente") {
-    const listItem = document.createElement("li");
-    const titulo = document.createElement("p");
-    titulo.textContent = ` ${item.titulo}`;
-    const fecha = document.createElement("p");
-    fecha.textContent = ` ${item.fecha}`; 
-    // Create delete button 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Eliminar";
-    deleteButton.addEventListener("click", () => {
-     itemList.removeChild(listItem); 
-    }); 
-     // Append paragraphs and delete button to list item 
-    listItem.appendChild(titulo); 
-    listItem.appendChild(fecha); 
-    listItem.appendChild(deleteButton); 
-    itemList.appendChild(listItem); 
-}
-});
+           });
+    const data = await response.json();
+    if (response.ok) {
+       
+       const arr = Array.from(data);
+       mostrarLista(arr); 
+       }
+         else {
+            throw new Error(`Error durante la obtención del evento: ${response}`); 
+           } } 
+           catch (error) {
+            throw new Error(`Error grave durante la obtención del evento: ${error}`); 
+           }
+       }
+
+       function mostrarLista(eventos) {
+           const lista = document.getElementById('lista');
+           lista.innerHTML = '';
+           eventos.forEach(evento => {
+               const eventolista = document.createElement('li');
+               const titulo = document.createElement("p");
+               titulo.textContent = ` ${evento.Nombre}`;
+               const fecha = document.createElement("p");
+               fecha.textContent = ` ${evento.FechaHora}`; 
+               // Crear botones
+
+               const deleteButton = document.createElement("button");
+               deleteButton.textContent = "Eliminar";
+               deleteButton.addEventListener("click", () => {
+                   eventolista.removeChild(eventolista); 
+                //eventos.push(evento);
+               });  
+               eventolista.appendChild(titulo); 
+               eventolista.appendChild(fecha); 
+                
+               eventolista.appendChild(deleteButton); 
+               lista.appendChild(eventolista); 
+              });
+           }
+
+getEventos();
+
