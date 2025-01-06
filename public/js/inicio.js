@@ -452,7 +452,6 @@ function displayCustom(name){
     eventList.appendChild(dia)
 
     getEventsByName(name).then(listaEventos => {
-        console.log(listaEventos)
         listaEventos.forEach((evento) =>{
             let obj = document.createElement("div")
             const startHourMatch = evento['FechaHora'].match(/\d+:\d+/gm)[0]
