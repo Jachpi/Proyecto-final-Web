@@ -44,7 +44,7 @@ const User = {
   // Registro de usuario con contraseña encriptada
   signup: (username, password, rol, email, callback) => { 
     console.log('Consulta SQL (signup):', username); 
-
+    let isApproved = 0; // Inicializar en 0 
     // Generar el hash de la contraseña
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) {
@@ -52,10 +52,14 @@ const User = {
         return callback(err);
       }
 
+      if (rol === 'Estudiante') {
+        isApproved = 1; // Aprobado automáticamente
+      }
+
       // Insertar usuario en la base de datos
       db.run(
         'INSERT INTO Usuarios (Username, Password, Rol, Email, isApproved) VALUES (?, ?, ?, ?, ?)', 
-        [username, hashedPassword, rol, email, 0], // isApproved inicializado en 0 (no aprobado)
+        [username, hashedPassword, rol, email, isApproved], 
         function(err) { 
           if (err) {
             console.error('Error en la consulta SQL (signup):', err.message);
