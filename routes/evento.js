@@ -13,6 +13,22 @@ router.post('/calendar/items', eventController.events)
 router.post('/idEvent', eventController.getIdEvent)
 router.post('/calendar/nameEvent', eventController.getEventByName)
 router.post('/create', upload.none(), eventController.createEvent) // Solo usuarios autenticados pueden crear eventos
+router.post('/isOwner', (req, res) => {
+  const { idEvento } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) {
+      return res.status(401).json({ error: 'No has iniciado sesión.' });
+  }
+
+  Event.isOwner(idEvento, userId, (err, isOwner) => {
+      if (err) {
+          return res.status(500).json({ error: 'Error al verificar permisos.' });
+      }
+      res.status(200).json({ isOwner });
+  });
+});
+
 router.get('/editar/:id', (req, res) => {
   const { id } = req.params;
   res.sendFile(path.join(__dirname, '../public/eventoform.html'));
