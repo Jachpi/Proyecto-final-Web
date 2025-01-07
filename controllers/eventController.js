@@ -97,9 +97,6 @@ exports.getEventById = (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
-    if (!evento) {
-      return res.status(404).json({ error: 'Evento no encontrado' });
-    }
     return res.status(200).json(evento);
   });
 };

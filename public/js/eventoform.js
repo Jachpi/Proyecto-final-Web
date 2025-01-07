@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
       } catch (err) {
           console.error('Error al cargar el evento:', err);
-          alert('Ocurrió un error al cargar el evento.');
+          //alert('Ocurrió un error al cargar el evento.');
       }
   }
 

@@ -121,8 +121,7 @@ body {
 }
 
 ul{
-
-    margin: 3% 10%;
+    margin-top: 150px;
 }
 
 li{
@@ -132,9 +131,10 @@ li{
     justify-content: center;
     align-items: center;
     background-color: white;
-    padding: 20px;
+    padding: 10px 10px;
     border-radius: 8px;
-    margin: 0.5% 0;
+    margin: 1% 1.5%;
+    cursor: pointer;
     
 }
 li p{
@@ -243,6 +243,3 @@ footer .logout-button:hover {
     color: white;
 }
 
-li {
-    cursor: pointer;
-}
