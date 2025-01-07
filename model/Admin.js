@@ -58,6 +58,35 @@ const Admin = {
       console.log('Evento aprobado');
       return callback(null);
     });
+  },
+  getUsuariosPendientes: (callback) => {
+    const query = `
+      SELECT * FROM Usuarios WHERE isApproved = 0`;
+
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        console.error('Error en la consulta SQL:', err.message);
+        return callback(err, null);
+      }
+
+      if (!rows) {
+        return callback(null, []);
+      }
+      return callback(null, rows);
+    });
+  },
+  aprobarUsuario: (id, callback) => {
+    const query = `
+      UPDATE Usuarios SET isApproved = 1 WHERE IDUsuario = ?`;
+
+    db.run(query, id, (err) => {
+      if (err) {
+        console.error('Error en la consulta SQL:', err.message);
+        return callback(err, null);
+      }
+      console.log('Evento aprobado');
+      return callback(null);
+    });
   }
 };
 
