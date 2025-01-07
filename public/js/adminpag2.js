@@ -1,5 +1,8 @@
-let pagebutton1 = document.getElementById("pendientes");
-let pagebutton2 = document.getElementById("aprobados");
+
+let pagebutton1 = document.getElementById("pendientes")
+let pagebutton2 = document.getElementById("aprobados")
+let pagebutton3 = document.getElementById("usuarios")
+
 
 pagebutton1.addEventListener('click', () => {
     window.location.href = "/inicioadmin.html";
@@ -8,7 +11,10 @@ pagebutton1.addEventListener('click', () => {
 pagebutton2.addEventListener('click', () => {
     window.location.href = "/adminpag2.html";
 });
+pagebutton3.addEventListener('click', () => {
+    window.location.href = "/admingestionusers.html";
 
+})
 document.getElementById('addevent').addEventListener('click', function (event) {
     event.preventDefault();
     window.location.href = '/eventoform.html';
@@ -97,6 +103,7 @@ function mostrarLista(eventos) {
         deleteButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Evitar que el clic en el botón active el evento del contenedor
             eliminar(evento.IDEvento);
+            lista.removeChild(eventolista);
         });
 
         // Redirigir al evento al hacer clic en el contenedor
