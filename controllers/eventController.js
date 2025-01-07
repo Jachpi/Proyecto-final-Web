@@ -1,4 +1,7 @@
 const Event = require('../model/Evento');
+const path = require('path');
+const fetch = require('node-fetch');
+const FormData = require('form-data');
 
 exports.events = (req, res) => {
   const { date, type } = req.body;
@@ -6,10 +9,8 @@ exports.events = (req, res) => {
 
   if (type === 'month') {
     filteredDate = date.substring(0, 7);
-    console.log('Searching for events from', filteredDate + '-XX');
   } else if (type === 'day') {
     filteredDate = date.substring(0, 10);
-    console.log('Searching for events from', filteredDate);
   }
 
   Event.getCalendarEvents(filteredDate, (err, events) => {
@@ -21,59 +22,33 @@ exports.events = (req, res) => {
 };
 
 exports.getIdEvent = (req, res) => {
-  const {id} = req.body;
+  const { id } = req.body;
   Event.getIdEvent(id, (err, evento) => {
     if (err) {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
     return res.status(200).json(evento);
-  })
-}
+  });
+};
 
 exports.getEventByName = (req, res) => {
-  const {name} = req.body;
-  console.log("Searching events with name:",name)
+  const { name } = req.body;
   Event.getEventByName(name, (err, events) => {
     if (err) {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
     return res.status(200).json(events);
-  })
-}
+  });
+};
 
 exports.createEvent = (req, res) => {
-  console.log('req.body:', req.body);
-  console.log('Sesión en createEvent:', req.session);
-
   if (!req.session?.userId) {
     return res.status(401).json({ error: 'Usuario no autenticado' });
   }
 
-  // Extraemos los campos que llegan en el body
-  const { 
-    nombre, 
-    descripcion, 
-    imagen, 
-    fechaHora,      // p. ej. "2025-01-01 22:00:00"
-    fechaHoraFin, 
-    categoria,
-    ubicacion 
-  } = req.body;
-
+  const { nombre, descripcion, imagen, fechaHora, fechaHoraFin, categoria, ubicacion } = req.body;
   const userId = req.session.userId;
 
-  // Verificar que la fechaHora no sea anterior a la fecha/hora actual
-  if (fechaHora) {
-    const fechaEvento = new Date(fechaHora);  // Convierto a objeto Date
-    const ahora = new Date();
-    
-    // Si el evento inicia antes que "ahora", regresamos error
-    if (fechaEvento < ahora) {
-      return res.status(400).json({ error: 'La fecha/hora del evento no puede ser anterior a la actual' });
-    }
-  }
-
-  // Construimos el objeto que insertaremos en la base de datos
   const nuevoEvento = {
     nombre,
     descripcion,
@@ -88,12 +63,64 @@ exports.createEvent = (req, res) => {
 
   Event.crearEvento(nuevoEvento, (err) => {
     if (err) {
-      console.error('Error en la consulta SQL:', err.message);
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
     return res.status(201).json({ success: true, message: 'Evento creado exitosamente' });
   });
-  
+};
+
+exports.isOwner = (req, res) => {
+  const { idEvento } = req.body;
+  const userId = req.session?.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'No has iniciado sesión.' });
+  }
+
+  Event.isOwner(idEvento, userId, (err, isOwner) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error al verificar permisos.' });
+    }
+    return res.status(200).json({ isOwner });
+  });
+};
+
+exports.renderEditForm = (req, res) => {
+  const { id } = req.params;
+  res.sendFile(path.join(__dirname, '../public/eventoform.html'));
+};
+
+exports.getEventById = (req, res) => {
+  const { id } = req.params;
+
+  Event.getIdEvent(id, (err, evento) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    if (!evento) {
+      return res.status(404).json({ error: 'Evento no encontrado' });
+    }
+    return res.status(200).json(evento);
+  });
+};
+
+exports.uploadImage = async (req, res) => {
+  try {
+    const fileBuffer = req.file.buffer;
+    const formData = new FormData();
+    formData.append('source', fileBuffer, { filename: req.file.originalname });
+
+    const API_KEY = '6d207e02198a847aa98d0a2a901485a5';
+    const response = await fetch(`https://freeimage.host/api/1/upload?key=${API_KEY}&format=json`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    return res.json(data);
+  } catch (error) {
+    return res.status(500).json({ error: 'No se pudo subir la imagen' });
+  }
 };
 
 exports.editEvent = (req, res) => {
@@ -103,34 +130,24 @@ exports.editEvent = (req, res) => {
     return res.status(401).json({ error: 'Usuario no autenticado' });
   }
 
-  console.log('Datos recibidos en editEvent:', req.body); // Log de depuración
-
   const userId = req.session.userId;
 
-  // Verificar si el usuario es propietario del evento
   Event.isOwner(idEvento, userId, (err, isOwner) => {
     if (err) {
-      console.error('Error al verificar propietario del evento:', err); // Log del error
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      return res.status(500).json({ error: 'Error al verificar propietario del evento.' });
     }
 
     if (!isOwner) {
       return res.status(403).json({ error: 'No tienes permiso para editar este evento.' });
     }
 
-    // Actualizar el evento
     const updatedEvent = { nombre, descripcion, imagen, fechaHora, fechaHoraFin, categoria, ubicacion };
-    console.log('Actualizando evento:', updatedEvent); // Log de depuración
 
     Event.updateEvent(idEvento, updatedEvent, (err) => {
       if (err) {
-        console.error('Error al actualizar el evento:', err.message); // Log del error
-        return res.status(500).json({ error: 'Error interno del servidor' });
+        return res.status(500).json({ error: 'Error interno del servidor.' });
       }
       return res.status(200).json({ success: true, message: 'Evento actualizado exitosamente.' });
     });
   });
 };
-
-
-
