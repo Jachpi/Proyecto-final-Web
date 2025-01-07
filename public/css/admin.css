@@ -242,3 +242,7 @@ footer .logout-button:hover {
     background-color: salmon;
     color: white;
 }
+
+li {
+    cursor: pointer;
+}

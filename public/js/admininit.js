@@ -98,18 +98,26 @@ function mostrarLista(eventos) {
         // Crear botones
         const approveButton = document.createElement("button");
         approveButton.textContent = "Aprobar";
-        approveButton.addEventListener("click", () => {
-             
+        approveButton.addEventListener("click", (e) => {
+            e.stopPropagation(); // Evita que el evento de clic en el contenedor se dispare
             aprobar(evento.IDEvento);
             lista.removeChild(eventolista);
         });
+
         const rejectButton = document.createElement("button");
         rejectButton.textContent = "Rechazar";
-        rejectButton.addEventListener("click", () => {
+        rejectButton.addEventListener("click", (e) => {
+            e.stopPropagation(); // Evita que el evento de clic en el contenedor se dispare
             eliminar(evento.IDEvento);
             lista.removeChild(eventolista);
-            
         });
+
+        // Evento click en el contenedor del evento
+        eventolista.addEventListener("click", () => {
+            window.location.href = `/evento.html?idEvento=${evento.IDEvento}`;
+        });
+
+        // Ensamblar el evento en la lista
         eventolista.appendChild(titulo);
         eventolista.appendChild(fecha);
         eventolista.appendChild(approveButton);
@@ -117,6 +125,7 @@ function mostrarLista(eventos) {
         lista.appendChild(eventolista);
     });
 }
+
 
 
 document.getElementById("logout-btn").addEventListener("click", async () => {

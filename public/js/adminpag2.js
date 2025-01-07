@@ -84,9 +84,12 @@ function mostrarLista(eventos) {
         });
         eventolista.appendChild(titulo);
         eventolista.appendChild(fecha);
-
         eventolista.appendChild(deleteButton);
         lista.appendChild(eventolista);
+
+        eventolista.addEventListener("click", () => {
+            window.location.href = `/evento.html?idEvento=${evento.IDEvento}`;
+        });
     });
 }
 
