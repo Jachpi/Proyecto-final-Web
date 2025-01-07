@@ -42,9 +42,22 @@ const Admin = {
           console.error('Error en la consulta SQL:', err.message);
           return callback(err, null);
         }
-        console.log('Evento eliminado con', this.id);
+        console.log('Evento eliminado ');
         return callback(null);
       });
+  },
+  aprobarEvento: (id, callback) => {
+    const query = `
+      UPDATE Evento SET Estado = 'Aprobado' WHERE IDEvento = ?`;
+
+    db.run(query, id, (err) => {
+      if (err) {
+        console.error('Error en la consulta SQL:', err.message);
+        return callback(err, null);
+      }
+      console.log('Evento aprobado');
+      return callback(null);
+    });
   }
 };
 

@@ -59,6 +59,31 @@ async function eliminar(id) {
     }
 
 }
+async function aprobar(id) {
+    try {
+        const response = await fetch(`admin/aprobar`, {
+         method: 'POST', 
+         credentials: 'include',
+         headers: {
+           'Content-Type': 'application/json'
+       },
+       body:JSON.stringify({id}),
+
+           });
+   
+    if (response.ok) {
+       console.log("Evento aprobado");
+       }
+         else {
+            throw new Error(`Error durante la obtención del evento: ${response}`); 
+           } } 
+           catch (error) {
+            throw new Error(`Error grave durante la obtención del evento: ${error}`); 
+           }
+       
+}
+
+
 
 function mostrarLista(eventos) {
     const lista = document.getElementById('lista');
@@ -74,7 +99,8 @@ function mostrarLista(eventos) {
         const approveButton = document.createElement("button");
         approveButton.textContent = "Aprobar";
         approveButton.addEventListener("click", () => {
-            //evento.status = "aprobado"; 
+             
+            aprobar(evento.IDEvento);
             lista.removeChild(eventolista);
         });
         const rejectButton = document.createElement("button");
@@ -82,7 +108,7 @@ function mostrarLista(eventos) {
         rejectButton.addEventListener("click", () => {
             eliminar(evento.IDEvento);
             lista.removeChild(eventolista);
-            //eventos.push(evento);
+            
         });
         eventolista.appendChild(titulo);
         eventolista.appendChild(fecha);
@@ -111,6 +137,7 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
         alert("Ocurrió un error. Inténtalo más tarde.");
     }
 });
+
 
 getEventos();
 
