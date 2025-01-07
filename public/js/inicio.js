@@ -636,6 +636,25 @@ async function getEventsByName(name){
     }
 }
 
+document.getElementById("logout-btn").addEventListener("click", async () => {
+    try {
+        const response = await fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'include', // Para enviar cookies/sesiones
+        });
+
+        if (response.ok) {
+            alert("Has cerrado sesión correctamente.");
+            window.location.href = '/index.html'; // Redirige al login
+        } else {
+            alert("Error al cerrar sesión. Inténtalo de nuevo.");
+        }
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+        alert("Ocurrió un error. Inténtalo más tarde.");
+    }
+});
+
 
 setup()
 

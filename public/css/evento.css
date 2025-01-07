@@ -218,3 +218,20 @@ footer {
     font-size: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+footer .logout-button {
+    background-color: white;
+    color: salmon;
+    border: 1px solid salmon;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+footer .logout-button:hover {
+    background-color: salmon;
+    color: white;
+}
