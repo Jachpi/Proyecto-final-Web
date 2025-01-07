@@ -13,6 +13,7 @@ document.getElementById('addevent').addEventListener('click', function (event) {
     event.preventDefault();
     window.location.href = '/eventoform.html';
 });
+
 async function getEventos() {
     try {
         const response = await fetch(`admin/eventosaprobados`, {
@@ -37,6 +38,29 @@ async function getEventos() {
             throw new Error(`Error grave durante la obtención del evento: ${error}`); 
            }
        }
+       async function eliminar(id) {
+        try {
+            const response = await fetch(`admin/eliminar`, {
+             method: 'DELETE', 
+             credentials: 'include',
+             headers: {
+               'Content-Type': 'application/json'
+           },
+           body:JSON.stringify({id}),
+    
+               });
+       
+        if (response.ok) {
+           console.log("Evento eliminado");
+           }
+             else {
+                throw new Error(`Error durante la obtención del evento: ${response}`); 
+               } } 
+               catch (error) {
+                throw new Error(`Error grave durante la obtención del evento: ${error}`); 
+               }
+           
+    }
 
        function mostrarLista(eventos) {
            const lista = document.getElementById('lista');
@@ -52,7 +76,8 @@ async function getEventos() {
                const deleteButton = document.createElement("button");
                deleteButton.textContent = "Eliminar";
                deleteButton.addEventListener("click", () => {
-                   eventolista.removeChild(eventolista); 
+                    eliminar(evento.IDEvento);
+                   lista.removeChild(eventolista); 
                 //eventos.push(evento);
                });  
                eventolista.appendChild(titulo); 
