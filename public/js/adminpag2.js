@@ -15,10 +15,7 @@ pagebutton3.addEventListener('click', () => {
     window.location.href = "/admingestionusers.html";
 
 })
-document.getElementById('addevent').addEventListener('click', function (event) {
-    event.preventDefault();
-    window.location.href = '/eventoform.html';
-});
+
 
 // Variables para la paginación
 let currentPage = 0;

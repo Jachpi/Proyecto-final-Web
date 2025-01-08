@@ -13,7 +13,7 @@ body {
     color: white;
     text-align: center;
     padding: 10px 0;
-    font-size: 20px;
+    
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 
@@ -22,8 +22,9 @@ body {
 .topnav h1 {
     font-style: italic;
     font-size: 24px;
-    margin: 10px 0;
+    margin: 10px 0 20px 0;
     color: white;
+    font-size: 24px;
 }
 .topnav a{
     color: white;
@@ -33,6 +34,7 @@ body {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     cursor: pointer;
+    font-size: 17px;
 }
 
 .topnav .modal-trigger {
@@ -123,6 +125,8 @@ body {
 
 ul{
     margin-top: 150px;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 li{
     display: flex;
@@ -134,7 +138,8 @@ li{
     padding: 10px 10px;
     margin: 1% 1.5%;
     border-radius: 8px;
-    margin: 2% 0;
+    text-align: center;
+
     
     
 }
@@ -148,6 +153,7 @@ li button{
     color: black;
     border-radius: 5px;
     font-size: 14px;
+    cursor: pointer;
     
 }
 li button:hover{
