@@ -89,7 +89,7 @@ const Evento = {
     const query = `
       INSERT INTO Evento
       (Nombre, Descripcion, Imagen, FechaHora, FechaHoraFin, IDOwner, Categoria, Estado, Ubicacion)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     // Prepara el array de parámetros en el orden exacto que pusiste en la consulta
