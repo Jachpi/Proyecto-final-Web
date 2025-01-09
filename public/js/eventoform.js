@@ -87,42 +87,53 @@ document.addEventListener('DOMContentLoaded', async () => {
       const horaFin = document.getElementById('hora-fin').value;
       const categoria = document.getElementById('categoria').value;
       const ubicacion = document.getElementById('ubicacion').value;
+      
+      const [dia, mes, anho] = fecha.split('/');
+      const validarFecha = new Date(`${anho}-${mes}-${dia}`);
+      console.log(validarFecha)
+      const fechaActual = new Date()
+      if(fechaActual.getTime() <= validarFecha.getTime()){
+        if(horaInicio < horaFin){
+        const fechaHoraInicio = `${fecha} ${horaInicio}:00`;
+        const fechaHoraFin = `${fecha} ${horaFin}:00`;
 
+        const body = {
+            idEvento: eventId || null,
+            nombre: nombre,
+            descripcion: descripcion,
+            imagen: uploadedImageURL || null, // URL de la imagen subida
+            fechaHora: fechaHoraInicio,
+            fechaHoraFin: fechaHoraFin,
+            categoria: categoria,
+            ubicacion: ubicacion
+        };
 
-      const fechaHoraInicio = `${fecha} ${horaInicio}:00`;
-      const fechaHoraFin = `${fecha} ${horaFin}:00`;
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+                credentials: 'include',
+            });
 
-      const body = {
-          idEvento: eventId || null,
-          nombre: nombre,
-          descripcion: descripcion,
-          imagen: uploadedImageURL || null, // URL de la imagen subida
-          fechaHora: fechaHoraInicio,
-          fechaHoraFin: fechaHoraFin,
-          categoria: categoria,
-          ubicacion: ubicacion
-      };
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data); // Depuración
 
-      try {
-          const response = await fetch(endpoint, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(body),
-              credentials: 'include',
-          });
-
-          const data = await response.json();
-          console.log('Respuesta del servidor:', data); // Depuración
-
-          if (response.ok) {
-              alert(data.message || 'Operación exitosa.');
-              window.location.href = '/inicio.html';
-          } else {
-              alert(data.error || 'Error al procesar la solicitud.');
-          }
-      } catch (err) {
-          console.error('Error al enviar el formulario:', err);
-          alert('No se pudo completar la operación. Revisa la consola para más detalles.');
-      }
+            if (response.ok) {
+                alert(data.message || 'Operación exitosa.');
+                window.location.href = '/inicio.html';
+            } else {
+                alert(data.error || 'Error al procesar la solicitud.');
+            }
+        } catch (err) {
+            console.error('Error al enviar el formulario:', err);
+            alert('No se pudo completar la operación. Revisa la consola para más detalles.');
+        }
+        }else{
+            alert('Eliga una fecha inicial posterior a la final');
+        }
+    }else{
+        alert('Eliga una fecha posterior a la actual');
+    }
   });
 });

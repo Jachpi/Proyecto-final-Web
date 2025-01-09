@@ -36,7 +36,7 @@ params.forEach(async (id, key) => {
                 fechaFin.innerHTML = "Hora de finalización: " + data["FechaHoraFin"].substring(10, 16);
                 categoria.innerHTML = data["Categoria"];
                 desc.innerHTML = data["Descripcion"];
-                ubicacion.innerHTML = data["Ubicacion"];
+                ubicacion.innerHTML = "Lugar: " + data["Ubicacion"];
                 if (data["Estado"] === "Aprobado") {
                     estado.innerHTML = "Programado";
                 } else if (data["Estado"] === "Terminado") {
